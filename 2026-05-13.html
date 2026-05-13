@@ -38,6 +38,11 @@
     border-radius: 12px;
     padding: 20px 24px;
     margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+  .section.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(108,143,255,0.15);
   }
   .section-title {
     font-size: 15px;
@@ -134,54 +139,285 @@
     letter-spacing: 0.08em;
     margin-bottom: 10px;
   }
+
+  /* 音频播放器样式 */
+  .audio-player {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .play-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .play-btn:hover { transform: scale(1.08); background: #8ba3ff; }
+  .play-btn svg { flex-shrink: 0; }
+  .player-info { flex: 1; }
+  .player-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .player-meta { font-size: 12px; color: var(--muted); }
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s linear;
+  }
+  .time-display { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: monospace; }
+
+  /* 浮动播放按钮 */
+  .floating-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(108,143,255,0.4);
+    transition: transform 0.2s;
+  }
+  .floating-btn:hover { transform: scale(1.1); }
+  .floating-btn.show { display: flex; }
+  .floating-btn svg { flex-shrink: 0; }
+  .floating-progress {
+    position: fixed;
+    bottom: 88px;
+    right: 24px;
+    z-index: 999;
+    width: 56px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .floating-progress.show { display: flex; }
+  .floating-time {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: monospace;
+    text-align: center;
+  }
+  .floating-ring {
+    width: 56px;
+    height: 56px;
+    transform: rotate(-90deg);
+  }
+  .floating-ring circle {
+    fill: none;
+    stroke-width: 4;
+  }
+  .floating-ring .bg { stroke: var(--border); }
+  .floating-ring .fg { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 0.3s linear; }
+
+  /* 当前播报高亮指示器 */
+  .now-playing {
+    position: absolute;
+    left: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .section.playing .now-playing { opacity: 1; }
+  .section { position: relative; }
 </style>
 </head>
 <body>
 
-<h1>📊 每日新闻总结</h1>
-<div class="subtitle">2026-05-13 星期三 | 由 Hermes AI 自动整理</div>
-
-<!-- 语音播放 -->
-<div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
-  <button id="playBtn" onclick="toggleAudio()" style="background: var(--accent); border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+<!-- 音频播放器 -->
+<div class="audio-player" id="audioPlayer">
+  <div class="now-playing"></div>
+  <button class="play-btn" id="playBtn" onclick="toggleAudio()">
     <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
     <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
   </button>
-  <div style="flex: 1;">
-    <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px;">🎧 点击播放语音版</div>
-    <div style="font-size: 12px; color: var(--muted);">约 1 分钟 · MiniMax TTS</div>
+  <div class="player-info">
+    <div class="player-title">🎧 语音版 · 2026-05-13</div>
+    <div class="player-meta" id="playerMeta">点击播放</div>
+    <div class="progress-bar" id="progressBar" onclick="seekAudio(event)">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
   </div>
   <audio id="newsAudio" src="audio/2026-05-13.ogg"></audio>
 </div>
+
+<!-- 浮动播放按钮 -->
+<div class="floating-btn" id="floatingBtn" onclick="toggleAudio()">
+  <svg id="floatPlayIcon" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+  <svg id="floatPauseIcon" width="24" height="24" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+</div>
+<div class="floating-progress" id="floatingProgress">
+  <svg class="floating-ring" viewBox="0 0 56 56">
+    <circle class="bg" cx="28" cy="28" r="24"/>
+    <circle class="fg" id="floatRing" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="150.8"/>
+  </svg>
+  <div class="floating-time" id="floatTime">0:00</div>
+</div>
+
 <script>
+// ===== 播报文本与时间轴同步 =====
+const sections = [
+  { id: 'sec-finance', start: 0,   end: 20,  label: '🏦 金融市场' },
+  { id: 'sec-football', start: 20, end: 35,  label: '⚽ 足球' },
+  { id: 'sec-basketball', start: 35, end: 50, label: '🏀 篮球' },
+  { id: 'sec-tennis', start: 50, end: 58,   label: '🎾 网球' },
+  { id: 'sec-f1', start: 58, end: 66,       label: '🏎️ F1' },
+  { id: 'sec-cs2', start: 66, end: 75,      label: '🎮 CS2' },
+];
+const totalDuration = 75; // 秒
+
 let playing = false;
+let currentSection = -1;
+let observer;
+const audio = document.getElementById('newsAudio');
+const progressFill = document.getElementById('progressFill');
+const timeDisplay = document.getElementById('timeDisplay');
+const playerMeta = document.getElementById('playerMeta');
+const floatingBtn = document.getElementById('floatingBtn');
+const floatingProgress = document.getElementById('floatingProgress');
+const floatRing = document.getElementById('floatRing');
+const floatTimeEl = document.getElementById('floatTime');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+const floatPlayIcon = document.getElementById('floatPlayIcon');
+const floatPauseIcon = document.getElementById('floatPauseIcon');
+
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return m + ':' + String(sec).padStart(2, '0');
+}
+
 function toggleAudio() {
-  var audio = document.getElementById('newsAudio');
-  var btn = document.getElementById('playBtn');
-  var playIcon = document.getElementById('playIcon');
-  var pauseIcon = document.getElementById('pauseIcon');
   if (playing) {
     audio.pause();
     audio.currentTime = 0;
-    playIcon.style.display = 'block';
-    pauseIcon.style.display = 'none';
     playing = false;
+    syncUI(false);
   } else {
-    audio.play();
-    playIcon.style.display = 'none';
-    pauseIcon.style.display = 'block';
+    audio.play().catch(() => {});
     playing = true;
+    syncUI(true);
   }
-  audio.onended = function() {
-    playIcon.style.display = 'block';
-    pauseIcon.style.display = 'none';
-    playing = false;
-  };
 }
+
+function syncUI(p) {
+  playIcon.style.display = p ? 'none' : 'block';
+  pauseIcon.style.display = p ? 'block' : 'none';
+  floatPlayIcon.style.display = p ? 'none' : 'block';
+  floatPauseIcon.style.display = p ? 'block' : 'none';
+}
+
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration) return;
+  const t = audio.currentTime;
+  const pct = (t / audio.duration) * 100;
+  progressFill.style.width = pct + '%';
+  timeDisplay.textContent = fmt(t) + ' / ' + fmt(audio.duration);
+
+  // 浮动环
+  const circumference = 150.8;
+  floatRing.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+  floatTimeEl.textContent = fmt(t);
+
+  // 高亮当前章节
+  const idx = sections.findIndex(s => t >= s.start && t < s.end);
+  if (idx !== currentSection) {
+    document.querySelectorAll('.section.playing').forEach(el => el.classList.remove('playing'));
+    if (idx >= 0) {
+      const el = document.getElementById(sections[idx].id);
+      if (el) {
+        el.classList.add('playing');
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    currentSection = idx;
+    playerMeta.textContent = idx >= 0 ? '正在播报：' + sections[idx].label : '播报结束';
+  }
+});
+
+audio.addEventListener('ended', () => {
+  playing = false;
+  syncUI(false);
+  playerMeta.textContent = '播报结束';
+  document.querySelectorAll('.section.playing').forEach(el => el.classList.remove('playing'));
+  currentSection = -1;
+});
+
+audio.addEventListener('loadedmetadata', () => {
+  timeDisplay.textContent = '0:00 / ' + fmt(audio.duration);
+});
+
+// 点击进度条跳转
+function seekAudio(e) {
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  if (audio.duration) {
+    audio.currentTime = pct * audio.duration;
+  }
+}
+
+// ===== 浮动按钮：检测播放器是否在视口内 =====
+const audioPlayer = document.getElementById('audioPlayer');
+const floatObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      floatingBtn.classList.remove('show');
+      floatingProgress.classList.remove('show');
+    } else if (playing) {
+      floatingBtn.classList.add('show');
+      floatingProgress.classList.add('show');
+    }
+  });
+}, { threshold: 0.1 });
+
+floatObs.observe(audioPlayer);
+
+// 初始化浮动按钮隐藏
+floatingBtn.classList.remove('show');
+floatingProgress.classList.remove('show');
 </script>
 
-<!-- 金融市场 -->
-<div class="section">
+<!-- 金融市场 id=sec-finance -->
+<div class="section" id="sec-finance">
   <div class="section-title"><span class="emoji">🏦</span>金融市场</div>
 
   <div class="sub-title">📈 美股 / 欧股指数</div>
@@ -291,7 +527,7 @@ function toggleAudio() {
   </div>
   <div class="jin10-item">
     <span class="time">05-12 21:10</span>
-    CME将与Silicon Data合作推出算力期货市场
+    CME将与SiliconData合作推出算力期货市场
   </div>
   <div class="jin10-item">
     <span class="time">05-12 20:55</span>
@@ -301,13 +537,13 @@ function toggleAudio() {
 
 <!-- 体育 -->
 <div class="two-col">
-  <!-- 足球 -->
-  <div class="section">
+  <!-- 足球 id=sec-football -->
+  <div class="section" id="sec-football">
     <div class="section-title"><span class="emoji">⚽</span>体育 · 足球 Top5</div>
     <ul class="news-list">
       <li class="news-item">
         <a href="https://news.zhibo8.com/zuqiu/2026-05-13/match1921438date2026vnative.htm" target="_blank">
-          进军世少赛！U17国足2-0卡塔尔U17小组出线 何思凡破门张伯霖建功
+          进军世少赛！U17国债2-0卡塔尔U17小组出线 何思凡破门张伯霖建功
         </a>
         <div class="source">直播吧</div>
       </li>
@@ -338,8 +574,8 @@ function toggleAudio() {
     </ul>
   </div>
 
-  <!-- 篮球 -->
-  <div class="section">
+  <!-- 篮球 id=sec-basketball -->
+  <div class="section" id="sec-basketball">
     <div class="section-title"><span class="emoji">🏀</span>体育 · 篮球 Top5</div>
     <ul class="news-list">
       <li class="news-item">
@@ -377,8 +613,8 @@ function toggleAudio() {
 </div>
 
 <div class="two-col">
-  <!-- 网球 -->
-  <div class="section">
+  <!-- 网球 id=sec-tennis -->
+  <div class="section" id="sec-tennis">
     <div class="section-title"><span class="emoji">🎾</span>体育 · 网球 Top5</div>
     <ul class="news-list">
       <li class="news-item">
@@ -414,8 +650,8 @@ function toggleAudio() {
     </ul>
   </div>
 
-  <!-- F1 -->
-  <div class="section">
+  <!-- F1 id=sec-f1 -->
+  <div class="section" id="sec-f1">
     <div class="section-title"><span class="emoji">🏎️</span>体育 · F1 Top5</div>
     <ul class="news-list">
       <li class="news-item">
@@ -452,8 +688,8 @@ function toggleAudio() {
   </div>
 </div>
 
-<!-- CS2 游戏 -->
-<div class="section">
+<!-- CS2 游戏 id=sec-cs2 -->
+<div class="section" id="sec-cs2">
   <div class="section-title"><span class="emoji">🎮</span>游戏 · CS2 Top10（来源：5eplay + 完美世界）</div>
   <ul class="news-list">
     <li class="news-item">
