@@ -141,6 +141,45 @@
 <h1>📊 每日新闻总结</h1>
 <div class="subtitle">2026-05-13 星期三 | 由 Hermes AI 自动整理</div>
 
+<!-- 语音播放 -->
+<div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
+  <button id="playBtn" onclick="toggleAudio()" style="background: var(--accent); border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+    <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+  <div style="flex: 1;">
+    <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px;">🎧 点击播放语音版</div>
+    <div style="font-size: 12px; color: var(--muted);">约 1 分钟 · MiniMax TTS</div>
+  </div>
+  <audio id="newsAudio" src="audio/2026-05-13.ogg"></audio>
+</div>
+<script>
+let playing = false;
+function toggleAudio() {
+  var audio = document.getElementById('newsAudio');
+  var btn = document.getElementById('playBtn');
+  var playIcon = document.getElementById('playIcon');
+  var pauseIcon = document.getElementById('pauseIcon');
+  if (playing) {
+    audio.pause();
+    audio.currentTime = 0;
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    playing = false;
+  } else {
+    audio.play();
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = 'block';
+    playing = true;
+  }
+  audio.onended = function() {
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    playing = false;
+  };
+}
+</script>
+
 <!-- 金融市场 -->
 <div class="section">
   <div class="section-title"><span class="emoji">🏦</span>金融市场</div>
