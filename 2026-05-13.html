@@ -144,12 +144,12 @@
   .audio-player {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 24px;
-    margin-bottom: 24px;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -158,8 +158,8 @@
     background: var(--accent);
     border: none;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -168,7 +168,7 @@
     transition: transform 0.2s, background 0.2s;
   }
   .play-btn:hover { transform: scale(1.08); background: #8ba3ff; }
-  .play-btn svg { width: 10px; height: 10px; flex-shrink: 0; }
+  .play-btn svg { width: 8px; height: 8px; flex-shrink: 0; }
   .player-info { flex: 1; }
   .player-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
   .player-meta { font-size: 12px; color: var(--muted); }
@@ -193,14 +193,14 @@
   /* 浮动播放按钮 */
   .floating-btn {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 20px;
+    right: 20px;
     z-index: 999;
     background: var(--accent);
     border: none;
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     display: none;
     align-items: center;
@@ -210,37 +210,37 @@
   }
   .floating-btn:hover { transform: scale(1.1); }
   .floating-btn.show { display: flex; }
-  .floating-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .floating-btn svg { width: 8px; height: 8px; flex-shrink: 0; }
   .floating-progress {
     position: fixed;
-    bottom: 60px;
-    right: 24px;
+    bottom: 48px;
+    right: 20px;
     z-index: 999;
-    width: 28px;
+    width: 20px;
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
   }
   .floating-progress.show { display: flex; }
   .floating-time {
-    font-size: 9px;
+    font-size: 8px;
     color: var(--muted);
     font-family: monospace;
     text-align: center;
   }
   .floating-ring {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
     transform: rotate(-90deg);
   }
   .floating-ring circle {
     fill: none;
-    stroke-width: 3;
+    stroke-width: 2;
   }
   .floating-ring .bg { stroke: var(--border); }
   .floating-ring .fg { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 0.3s linear; }
-  .floating-ring .fg { stroke-dasharray: 75.4; stroke-dashoffset: 75.4; }
+  .floating-ring .fg { stroke-dasharray: 53.4; stroke-dashoffset: 53.4; }
 
   /* 当前播报高亮指示器 */
   .now-playing {
@@ -260,6 +260,9 @@
 </style>
 </head>
 <body>
+
+<h1>每日新闻总结 · 2026-05-13</h1>
+<div class="subtitle">由 Hermes AI 生成 · <a href="2026-05-13.html">纯文字版</a></div>
 
 <!-- 音频播放器 -->
 <div class="audio-player" id="audioPlayer">
@@ -307,6 +310,9 @@ const totalDuration = 75; // 秒
 let playing = false;
 let currentSection = -1;
 let observer;
+let scrollStartTime = null;
+let scrollStartY = 0;
+let scrollSpeed = 0; // px/秒
 const audio = document.getElementById('newsAudio');
 const progressFill = document.getElementById('progressFill');
 const timeDisplay = document.getElementById('timeDisplay');
@@ -332,6 +338,7 @@ function toggleAudio() {
     audio.currentTime = 0;
     playing = false;
     syncUI(false);
+    scrollStartTime = null;
   } else {
     audio.play().catch(() => {});
     playing = true;
@@ -354,9 +361,14 @@ audio.addEventListener('timeupdate', () => {
   timeDisplay.textContent = fmt(t) + ' / ' + fmt(audio.duration);
 
   // 浮动环
-  const circumference = 150.8;
+  const circumference = 53.4;
   floatRing.style.strokeDashoffset = circumference - (pct / 100) * circumference;
   floatTimeEl.textContent = fmt(t);
+
+  // 匀速平滑滚动：根据播放进度比例计算目标Y
+  const scrollHeight = document.body.scrollHeight - window.innerHeight;
+  const targetY = (pct / 100) * scrollHeight;
+  window.scrollTo({ top: targetY, behavior: 'instant' });
 
   // 高亮当前章节
   const idx = sections.findIndex(s => t >= s.start && t < s.end);
@@ -364,10 +376,7 @@ audio.addEventListener('timeupdate', () => {
     document.querySelectorAll('.section.playing').forEach(el => el.classList.remove('playing'));
     if (idx >= 0) {
       const el = document.getElementById(sections[idx].id);
-      if (el) {
-        el.classList.add('playing');
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      if (el) el.classList.add('playing');
     }
     currentSection = idx;
     playerMeta.textContent = idx >= 0 ? '正在播报：' + sections[idx].label : '播报结束';
