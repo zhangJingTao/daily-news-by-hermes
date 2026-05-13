@@ -310,9 +310,6 @@ const totalDuration = 75; // 秒
 let playing = false;
 let currentSection = -1;
 let observer;
-let scrollStartTime = null;
-let scrollStartY = 0;
-let scrollSpeed = 0; // px/秒
 const audio = document.getElementById('newsAudio');
 const progressFill = document.getElementById('progressFill');
 const timeDisplay = document.getElementById('timeDisplay');
@@ -338,7 +335,6 @@ function toggleAudio() {
     audio.currentTime = 0;
     playing = false;
     syncUI(false);
-    scrollStartTime = null;
   } else {
     audio.play().catch(() => {});
     playing = true;
@@ -365,12 +361,7 @@ audio.addEventListener('timeupdate', () => {
   floatRing.style.strokeDashoffset = circumference - (pct / 100) * circumference;
   floatTimeEl.textContent = fmt(t);
 
-  // 匀速平滑滚动：根据播放进度比例计算目标Y
-  const scrollHeight = document.body.scrollHeight - window.innerHeight;
-  const targetY = (pct / 100) * scrollHeight;
-  window.scrollTo({ top: targetY, behavior: 'instant' });
-
-  // 高亮当前章节
+  // 高亮当前章节（手动滑动查看）
   const idx = sections.findIndex(s => t >= s.start && t < s.end);
   if (idx !== currentSection) {
     document.querySelectorAll('.section.playing').forEach(el => el.classList.remove('playing'));
