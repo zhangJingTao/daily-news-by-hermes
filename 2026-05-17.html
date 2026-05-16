@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日新闻总结 · 2026-05-17</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --card: #1a1d27;
+  --border: #2a2d3e;
+  --accent: #6c8fff;
+  --text: #e0e3f0;
+  --muted: #7a82a8;
+  --green: #3ecf8e;
+  --red: #ff6b6b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; max-width: 860px; margin: 0 auto; padding: 16px 12px 80px; line-height: 1.6; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; border-radius: 4px; }
+
+/* Market bar */
+.market-bar { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; margin-bottom: 20px; white-space: nowrap; }
+.mi { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; display: inline-flex; flex-direction: column; min-width: 90px; }
+.mi .lbl { font-size: 11px; color: var(--muted); }
+.mi .val { font-size: 16px; font-weight: 700; }
+.up { color: var(--red); }
+.dn { color: var(--green); }
+
+/* Sections */
+.section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.section h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+
+/* News cards */
+.news-card { border-left: 3px solid var(--border); padding: 10px 14px; margin-bottom: 12px; transition: border-color 0.3s; }
+.news-card:last-child { margin-bottom: 0; }
+.news-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.news-card .summary { font-size: 13px; color: var(--muted); margin-bottom: 6px; line-height: 1.5; }
+.news-card .taoluan { font-size: 12px; color: #9ba3d4; font-style: italic; margin-bottom: 6px; }
+.news-card .source { font-size: 11px; color: var(--muted); }
+.news-card .rank { font-size: 16px; margin-right: 4px; }
+.news-card.top1 { border-left-color: #ffd700; }
+.news-card.top2 { border-left-color: #c0c0c0; }
+.news-card.top3 { border-left-color: #cd7f32; }
+
+/* Audio player */
+.audio-player { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
+.play-btn { background: var(--accent); border: none; border-radius: 50%; width: 18px; height: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.play-btn svg { width: 8px; height: 8px; flex-shrink: 0; }
+.floating-btn { position: fixed; bottom: 20px; right: 20px; z-index: 999; background: var(--accent); border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(108,143,255,0.4); }
+.floating-btn.show { display: flex; }
+.floating-btn svg { width: 8px; height: 8px; flex-shrink: 0; }
+.floating-progress { position: fixed; bottom: 48px; right: 20px; z-index: 999; width: 20px; display: none; flex-direction: column; align-items: center; gap: 2px; }
+.floating-progress.show { display: flex; }
+.floating-time { font-size: 8px; color: var(--muted); font-family: monospace; text-align: center; }
+.floating-ring { width: 20px; height: 20px; transform: rotate(-90deg); }
+.floating-ring circle { fill: none; stroke-width: 2; }
+.floating-ring .bg { stroke: var(--border); }
+.floating-ring .fg { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 0.3s linear; }
+.floating-ring .fg { stroke-dasharray: 53.4; stroke-dashoffset: 53.4; }
+.player-info { flex: 1; min-width: 0; }
+.player-title { font-size: 12px; font-weight: 600; color: var(--text); }
+.player-meta { font-size: 11px; color: var(--muted); }
+.progress-bar { height: 4px; background: var(--border); border-radius: 2px; cursor: pointer; margin: 4px 0; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0%; }
+.time-display { font-size: 10px; color: var(--muted); font-family: monospace; }
+.now-playing { position: absolute; left: -1px; top: 50%; transform: translateY(-50%); width: 3px; height: 60%; background: var(--accent); border-radius: 0 2px 2px 0; opacity: 0; transition: opacity 0.3s; }
+.section { position: relative; }
+.section.playing { border-color: var(--accent); box-shadow: 0 0 20px rgba(108,143,255,0.15); }
+.jin10-item a { color: var(--text); text-decoration: none; display: block; }
+.jin10-item a:hover { color: var(--accent); }
+h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.subtitle { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+footer { text-align: center; font-size: 12px; color: var(--muted); padding: 24px 0 8px; border-top: 1px solid var(--border); margin-top: 24px; }
+footer a { color: var(--accent); }
+.market-section { margin-bottom: 4px; }
+.market-section h2 { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<h1>每日新闻总结 · 2026-05-17</h1>
+<div class="subtitle">由 Hermes AI 生成 · 2026-05-17 06:00</div>
+
+<!-- 音频播放器 -->
+<div class="audio-player" id="audioPlayer">
+  <div class="now-playing"></div>
+  <button class="play-btn" id="playBtn" onclick="toggleAudio()">
+    <svg id="playIcon" width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="pauseIcon" width="8" height="8" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+  <div class="player-info">
+    <div class="player-title">🎧 语音版 · 2026-05-17</div>
+    <div class="player-meta" id="playerMeta">点击播放</div>
+    <div class="progress-bar" id="progressBar" onclick="seekAudio(event)">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+  </div>
+  <audio id="newsAudio" src="audio/2026-05-17.ogg"></audio>
+</div>
+
+<!-- 浮动播放按钮 -->
+<div class="floating-btn" id="floatingBtn" onclick="toggleAudio()">
+  <svg id="floatPlayIcon" width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+  <svg id="floatPauseIcon" width="8" height="8" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+</div>
+<div class="floating-progress" id="floatingProgress">
+  <svg class="floating-ring" viewBox="0 0 20 20">
+    <circle class="bg" cx="10" cy="10" r="8.5"/>
+    <circle class="fg" id="floatRing" cx="10" cy="10" r="8.5"/>
+  </svg>
+  <div class="floating-time" id="floatTime">0:00</div>
+</div>
+
+<!-- 金融市场 -->
+<div class="section market-section" id="sec-finance">
+  <h2>🏦 金融市场</h2>
+  <div class="market-bar">
+    <div class="mi"><span class="lbl">上证综指</span><span class="val up">4135.39<br><small>+1.02%</small></span></div>
+    <div class="mi"><span class="lbl">富时A50</span><span class="val up">15675<br><small>+1.04%</small></span></div>
+    <div class="mi"><span class="lbl">现货黄金</span><span class="val up">4538<br><small>+2.43%</small></span></div>
+    <div class="mi"><span class="lbl">WTI原油</span><span class="val up">105.22<br><small>+3.12%</small></span></div>
+    <div class="mi"><span class="lbl">布伦特油</span><span class="val up">106.12<br><small>+2.16%</small></span></div>
+    <div class="mi"><span class="lbl">现货白银</span><span class="val up">75.90<br><small>+9.07%</small></span></div>
+    <div class="mi"><span class="lbl">美元指数</span><span class="val up">99.29<br><small>+0.42%</small></span></div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">📡 数据来源：金十数据 · 注：周日美股休市，现货数据来自金十</p>
+
+  <div class="news-card top1">
+    <span class="rank">🥇</span>
+    <h4>霍尔木兹海峡危机未解，美国终止俄罗斯原油销售豁免</h4>
+    <p class="summary">中东紧张局势持续升级，美国宣布终止俄罗斯原油销售豁免令，全球油轮运费暴涨。WTI原油单日大涨3.12%突破105美元，布伦特原油同步走强，现货黄金逼近4540美元/盎司关口，白银暴涨9%。能源板块全面拉升，市场避险情绪显著升温。</p>
+    <p class="taoluan">💬 霍尔木兹海峡那条船只要稍微晚到一天，油价就能多涨5美元，中东的石油比足球还抢手。</p>
+    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+  </div>
+
+  <div class="news-card top2">
+    <span class="rank">🥈</span>
+    <h4>商务部就中美经贸磋商初步成果答记者问</h4>
+    <p class="summary">商务部新闻发言人表示，中美双方已就经贸磋商取得初步成果，相关细节将在近期公布。市场对此反应积极，A50期指当日上涨1.04%，上证综指收涨1.02%站上4135点，创近期反弹新高。</p>
+    <p class="taoluan">💬 商务部这次没有用"建设性"三连，而是用了"初步成果"——看来这次是真谈了点东西，不是客套话。</p>
+    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+  </div>
+
+  <div class="news-card top3">
+    <span class="rank">🥉</span>
+    <h4>英国首相斯塔默已制定辞职时间表？英媒称消息人士透露</h4>
+    <p class="summary">据英国每日邮报报道，消息人士称英国首相斯塔默已向密友透露辞职意向，并制定有序离任时间表。消息公布后英镑短线波动，市场关注英国政治前景不确定性。</p>
+    <p class="taoluan">💬 斯塔默上任还没多久就要制定辞职时间表，英国首相这个位置果然是个烫手山芋，比英镑还难稳住。</p>
+    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+  </div>
+
+  <div class="news-card">
+    <h4>美国"福特"号航母返回母港，历时11个月海外部署创越战以来最长纪录</h4>
+    <p class="summary">美国最先进的"福特"号核动力航母在结束为期11个月的海外部署后返回弗吉尼亚州母港，期间参与了美国对伊朗的军事行动并参与俘虏委内瑞拉总统马杜罗的尝试。约5000名水兵终于与家人团聚。</p>
+    <p class="taoluan">💬 航母部署11个月，水兵们最想念的恐怕不是战功，而是一顿家常菜和家里那张床。</p>
+    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+  </div>
+
+  <div class="news-card">
+    <h4>联合国秘书长欢迎黎以延长停火</h4>
+    <p class="summary">联合国秘书长古特雷斯对黎巴嫩与以色列延长停火协议表示欢迎，认为这为地区稳定带来积极信号此前双方在联合国斡旋下达成为期60天的停火协议并已生效。</p>
+    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+  </div>
+
+  <div class="news-card">
+    <h4>伊朗股市将于下周二重开</h4>
+    <p class="summary">伊朗股市在因地区紧张局势关闭多日后，将于下周二重开。市场关注伊朗股市恢复交易后的表现及其对中东金融市场的连锁影响。</p>
+    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+  </div>
+</div>
+
+<!-- 足球 -->
+<div class="section" id="sec-football">
+  <h2>⚽ 足球</h2>
+  <div class="news-card top1">
+    <span class="rank">🥇</span>
+    <h4>曼城1-0切尔西夺足总杯冠军，瓜氏曼城10年20冠</h4>
+    <p class="summary">曼城凭借塞梅尼奥的脚后跟破门1比0击败切尔西，夺得队史第8座足总杯冠军，这也是瓜迪奥拉执教曼城10年来的第20座冠军奖杯。进球存在一定争议——裁判判罚引发切尔西不满，但曼城仍成功加冕国内双冠王。</p>
+    <p class="taoluan">💬 塞梅尼奥这个脚后跟射门，完美诠释了什么叫"球商比脚法更重要"。切尔西全队的表情管理失败。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card top2">
+    <span class="rank">🥈</span>
+    <h4>Al-Nassr 0-1大阪钢巴，无缘亚冠二级冠军</h4>
+    <p class="summary">C罗效力的Al-Nassr在亚冠二级决赛中0比1不敌日本球队大阪钢巴，全场20脚射门未能转化为进球，菲利克斯射门中柱。C罗缺席赛后颁奖典礼，胜利生涯仍无主要赛事冠军，进球荒延续。</p>
+    <p class="taoluan">💬 20脚射门换不来一个进球——C罗这场的运气，大概都拿去换了赛后的头条新闻版面费。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card top3">
+    <span class="rank">🥉</span>
+    <h4>罗马诺：阿隆索将执教切尔西，签约4年</h4>
+    <p class="summary">知名转会记者罗马诺以标志性的"Here We Go"确认，西班牙少帅阿隆索将在赛季结束后接过切尔西教鞭，签约4年。阿隆索此前执教勒沃库森期间表现不俗，曾带队击败拜仁夺冠。</p>
+    <p class="taoluan">💬 罗马诺的"Here We Go"比阿隆索的战术板还靠谱，这个消息基本等于官宣了。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card">
+    <h4>U16国足以4-1大胜韩国，贺炜感叹"韩国兵力全在禁区回不来了"</h4>
+    <p class="summary">中国U16男足在热身赛中以4比1大胜韩国队，开场36秒即闪击破门。著名解说贺炜在社交媒体感叹："韩国兵力全在禁区回不来了。"这支年轻球队的表现让中国球迷看到希望。</p>
+    <p class="taoluan">💬 36秒闪击+4比1大胜——国少这次表现，让熬夜看球的中国球迷终于能在朋友面前抬起头了。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card">
+    <h4>克星？胜利连续两年被日本球队淘汰</h4>
+    <p class="summary">Al-Nassr连续两个赛季在亚冠及亚冠二级赛事中被日本球队淘汰，均以弱胜强。C罗加盟胜利后，3年半时间内14项官方主要赛事均未能夺冠，俱乐部冠军荒仍在延续。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+</div>
+
+<!-- 篮球 -->
+<div class="section" id="sec-basketball">
+  <h2>🏀 篮球</h2>
+  <div class="news-card top1">
+    <span class="rank">🥇</span>
+    <h4>森林狼主场大比分不敌雷霆，系列赛出局</h4>
+    <p class="summary">NBA季后赛雷霆对阵森林狼第七场，森林狼在主场以大比分落败，系列赛出局。当家球星全场表现低迷，赛后爱德华兹主动走向对手表达祝贺，展现了极佳的体育精神，也获得了"卡斯尔"等球员的高度评价。</p>
+    <p class="taoluan">💬 森林狼主场输了20分以上——这不是抢七，这是"抢着回家钓鱼"。爱德华兹这个祝贺来得太真实了。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card top2">
+    <span class="rank">🥈</span>
+    <h4>诺维茨基：从未见过爱德华兹这样提前祝贺对手的球员</h4>
+    <p class="summary">独行侠名宿诺维茨基在节目中表示，自己打球至今从未见过像爱德华兹这样，在比赛还剩8分钟时就去向对手表示祝贺的球员。诺维茨基认为这种风度展示了爱德华兹的成熟和不寻常的人格魅力。</p>
+    <p class="taoluan">💬 诺维茨基这话说得，既像夸人，又像在说"这小子太不讲武德"——但谁不喜欢有风度的对手呢？</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card top3">
+    <span class="rank">🥉</span>
+    <h4>美记：森林狼可能会拆散戈贝尔、兰德尔、里德组合</h4>
+    <p class="summary">美国记者报道，森林狼可能在下赛季拆散戈贝尔、兰德尔和里德的内线三人组，以给贝兰利更多成长空间。此次系列赛的失败让球队管理层开始认真考虑阵容调整的可能性。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card">
+    <h4>福克斯系列赛场均17.7分5助攻，后5场合计仅6个失误</h4>
+    <p class="summary">国王后卫福克斯在本次季后赛系列赛中表现稳定，场均贡献17.7分和5次助攻，更为难能可贵的是后5场比赛合计仅出现6次失误，控球表现相当稳健。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card">
+    <h4>苏群：文班产生"张伯伦效应"，若不改规则他夺冠拿MVP是迟早的事</h4>
+    <p class="summary">著名篮球评论员苏群表示，文班亚马上赛季的表现产生了类似当年张伯伦的效应——他的存在让现有规则显得不够用。如果NBA不调整规则，文班赢得总冠军和MVP只是时间问题。</p>
+    <p class="taoluan">💬 文班现在的表现已经是"NBA规则补丁待发"状态了，比游戏公司修复bug还紧迫。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+</div>
+
+<!-- 网球 -->
+<div class="section" id="sec-tennis">
+  <h2>🎾 网球</h2>
+  <div class="news-card top1">
+    <span class="rank">🥇</span>
+    <h4>斯维托丽娜2-1击败高芙，夺罗马站冠军，赛季三杀对手</h4>
+    <p class="summary">在WTA罗马站决赛中，斯维托丽娜以2-1战胜新星高芙，成功加冕罗马三冠王。这是她本赛季第三次击败高芙，展现了极佳的竞技状态。赛后她表示这座冠军"意义非凡"。</p>
+    <p class="taoluan">💬 赛季三杀高芙——斯维托丽娜用行动证明，温柔也能成为武器。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card top2">
+    <span class="rank">🥈</span>
+    <h4>辛纳2-1淘汰梅德韦杰夫，晋级罗马大师赛决赛</h4>
+    <p class="summary">ATP罗马大师赛半决赛，辛纳以2-1力克梅德韦杰夫，晋级决赛。这是他连续第5站大师赛晋级决赛，距实现"金大师"霸业只差最后一步——再夺一冠即可完成包揽全部9站大师赛冠军的历史壮举。</p>
+    <p class="taoluan">💬 辛纳现在打球，就像考试前已经知道答案，只是选择用哪种方法写出来——太稳了。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card top3">
+    <span class="rank">🥉</span>
+    <h4>辛纳单赛季前5站大师赛全进决赛，追平纳达尔纪录</h4>
+    <p class="summary">辛纳在罗马大师赛晋级决赛后，成为纳达尔之后历史上第二位单赛季前5站ATP大师赛全部晋级决赛的球员。目前他已夺得8站大师赛冠军，只差罗马一冠即可加冕"金大师"。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card">
+    <h4>ATP最长连胜纪录：德约43场居首，费德勒41场第二，辛纳28场</h4>
+    <p class="summary">随着辛纳近期表现持续稳定，他的赛季连胜已达到28场，排名ATP历史连胜榜第三位。前两位分别是德约科维奇的43场和费德勒的41场——辛纳正在追赶传奇的路上。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+
+  <div class="news-card">
+    <h4>19胜1负！辛纳近20场对世界前十战绩惊人</h4>
+    <p class="summary">统计数据显示，辛纳近期对阵世界前十的战绩为19胜1负，击败过阿尔卡拉斯、兹维列夫等众多顶尖选手。这一数据充分证明了他的统治力已不局限于低排名选手。</p>
+    <div class="source">📡 直播吧</div>
+  </div>
+</div>
+
+<!-- F1 -->
+<div class="section" id="sec-f1">
+  <h2>🏎️ F1</h2>
+  <div class="news-card top1">
+    <span class="rank">🥇</span>
+    <h4>维斯塔潘夺赛季第13冠，红牛加冕车队总冠军</h4>
+    <p class="summary">F1赛历进行中，维斯塔潘以稳定表现夺得赛季第13场分站冠军，同时帮助红牛车队提前锁定年度车队总冠军。维斯塔潘表示："这个赛季对我们每个人来说都很特别，我们会继续全力以赴。"</p>
+    <p class="taoluan">💬 赛季才跑了十几站就13冠了——维斯塔潘不是在开车，是在写年终报告，每项数据都超标。</p>
+    <div class="source">📡 网易体育</div>
+  </div>
+
+  <div class="news-card">
+    <h4>大逆转！维斯塔潘绝杀夺F1车手总冠军</h4>
+    <p class="summary">回顾维斯塔潘某站比赛的精彩逆转，他在比赛后期完成关键超车，绝杀夺冠。这一场胜利被认为是其职业生涯最具戏剧性的比赛之一。</p>
+    <div class="source">📡 网易体育</div>
+  </div>
+
+  <div class="news-card">
+    <h4>冰人谢幕！回顾莱科宁21年传奇职业生涯</h4>
+    <p class="summary">回顾F1传奇车手莱科宁的21年职业生涯，"冰人"莱科宁以低调个性和惊人速度著称，是F1历史上最受喜爱车手之一。退役后的他享受着与世无争的生活。</p>
+    <div class="source">📡 网易体育</div>
+  </div>
+
+  <div class="news-card">
+    <h4>博塔斯摘赛季首冠，香槟喷自己超兴奋</h4>
+    <p class="summary">博塔斯在某站比赛中终于收获赛季首胜，赛后香槟庆祝环节异常兴奋，对着镜头和工作人员一通狂喷。网友表示："芬兰人稳重人设崩塌现场。"</p>
+    <div class="source">📡 网易体育</div>
+  </div>
+
+  <div class="news-card">
+    <h4>F1俄罗斯站汉密尔顿夺冠实现生涯100胜</h4>
+    <p class="summary">汉密尔顿在F1俄罗斯站夺冠，成为继舒马赫之后第二位达成生涯100胜里程碑的车手。这一成就被视为F1历史上最伟大的纪录之一。</p>
+    <div class="source">📡 网易体育</div>
+  </div>
+</div>
+
+<!-- CS2 -->
+<div class="section" id="sec-cs2">
+  <h2>🎮 CS2</h2>
+  <div class="news-card top1">
+    <span class="rank">🥇</span>
+    <h4>m0NESY单图轰出2.26 Rating，Falcons碾压晋级决赛</h4>
+    <p class="summary">PGL阿斯塔纳站半决赛，m0NESY在单张地图中打出惊人的2.26 Rating，以绝对统治级别的表现带领Falcons 2-0横扫magic，强势晋级决赛。这场比赛被视为m0NESY职业生涯最出色的个人表演之一。</p>
+    <p class="taoluan">💬 2.26 Rating是什么概念？就是对面五个人加起来都没有他一个人的Rating高——这不是打游戏，这叫降维打击。</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card top2">
+    <span class="rank">🥈</span>
+    <h4>donk两图平均1.95 Rating速通MOUZ</h4>
+    <p class="summary">Spirit选手donk在PGL阿斯塔纳站比赛中连续两张地图打出极高Rating，以平均1.95的表现帮助Spirit 2-0速通MOUZ。donk近期状态火热，已成为年度最佳选手的有力竞争者。</p>
+    <p class="taoluan">💬 donk这个Rating，比很多人的银行利息还高——对面MOUZ估计现在还在怀疑人生。</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card top3">
+    <span class="rank">🥉</span>
+    <h4>NAVI终结BO3对阵Vitality十一连败魔咒</h4>
+    <p class="summary">NAVI终于在对阵Vitality的BO3比赛中取得久违胜利，终结了此前连续11场BO3不胜Vitality的尴尬纪录。这场胜利对NAVI全队士气提振极大，队员们在社交媒体上难掩激动。</p>
+    <p class="taoluan">💬 11连败——NAVI每次打Vitality可能都在想："这次总该赢了吧？"今天终于等到了。</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card">
+    <h4>Vitality 21场四强和28张地图淘汰赛连胜纪录同时作古</h4>
+    <p class="summary">NAVI击败Vitality的同时，也终结了Vitality两项令人难以置信的纪录——连续21项赛事的四强纪录，以及连续28张地图在淘汰赛中获胜的辉煌战绩。Vitality的时代结束了吗？</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card">
+    <h4>ACL 2026：LVG让一追二战胜TdU，TYLOO掉入败者组</h4>
+    <p class="summary">英雄亚冠ACL 2026胜者组半决赛，LVG在先失一图的情况下连扳两局，以2-1逆转战胜TdU，晋级胜者组决赛。另一场比赛中，TYLOO以0-2不敌JJH，掉入败者组。</p>
+    <p class="taoluan">💬 LVG这韧性，关键时刻能顶住——国内CS2还是有希望的。</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card">
+    <h4>chopper：我不想和jabbi或stavn一起打游戏</h4>
+    <p class="summary">HEROIC选手chopper近日在直播中坦言："我不想和jabbi或stavn一起打游戏。"这番言论再次引发了关于战队内部关系的猜测，社交媒体上相关讨论热度居高不下。</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card">
+    <h4>sh1ro回忆早年CS生涯：用六七十帧的笔记本也打得不亦乐乎</h4>
+    <p class="summary">Spirit选手sh1ro在采访中回顾了自己早年的CS职业生涯，透露当年用六七十帧的笔记本一样打得开心，并表示："那时候从来没想过能成为职业选手。"</p>
+    <p class="taoluan">💬 六七十帧的笔记本能打出职业水平——现在的高端配置玩家，你们还好意思说电脑卡吗？</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card">
+    <h4>YEKINDAR：我们投身CS赛场，就是为了奔赴这样精彩的对局</h4>
+    <p class="summary">YEKINDAR在击败Vitality后接受采访表示："我们投身CS赛场，就是为了奔赴这样精彩的对局。"他的出色发挥被认为是NAVI获胜的关键因素之一。</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card">
+    <h4>m0NESY谈击败FURIA：这是我CS职业生涯里最艰难的比赛之一</h4>
+    <p class="summary">m0NESY在击败FURIA后坦言，这是他CS职业生涯中遇到的最艰难比赛之一。尽管最终获胜，他仍对FURIA的实力给予了高度评价。</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+
+  <div class="news-card">
+    <h4>HEROIC被移出2026年电竞世界杯合作伙伴计划</h4>
+    <p class="summary">HEROIC战队已被官方从2026年电竞世界杯合作伙伴计划中移除，原因尚不明确。此消息引发了圈内的广泛讨论和猜测。</p>
+    <div class="source">📡 5eplay</div>
+  </div>
+</div>
+
+<footer>
+  由 <a href="https://github.com/zhangJingTao/daily-news-by-hermes">Hermes AI</a> 每日自动生成 ·
+  <a href="https://zhangJingTao.github.io/daily-news-by-hermes/">📋 新闻总览</a>
+</footer>
+
+<script>
+const sections = [
+  { id: 'sec-finance', start: 0, end: 20, label: '🏦 金融市场' },
+  { id: 'sec-football', start: 20, end: 35, label: '⚽ 足球' },
+  { id: 'sec-basketball', start: 35, end: 50, label: '🏀 篮球' },
+  { id: 'sec-tennis', start: 50, end: 58, label: '🎾 网球' },
+  { id: 'sec-f1', start: 58, end: 66, label: '🏎️ F1' },
+  { id: 'sec-cs2', start: 66, end: 75, label: '🎮 CS2' },
+];
+let playing = false;
+let currentSection = -1;
+const audio = document.getElementById('newsAudio');
+const progressFill = document.getElementById('progressFill');
+const timeDisplay = document.getElementById('timeDisplay');
+const playerMeta = document.getElementById('playerMeta');
+const floatingBtn = document.getElementById('floatingBtn');
+const floatingProgress = document.getElementById('floatingProgress');
+const floatRing = document.getElementById('floatRing');
+const floatTimeEl = document.getElementById('floatTime');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+const floatPlayIcon = document.getElementById('floatPlayIcon');
+const floatPauseIcon = document.getElementById('floatPauseIcon');
+
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return m + ':' + String(sec).padStart(2, '0');
+}
+
+function toggleAudio() {
+  if (playing) {
+    audio.pause();
+    audio.currentTime = 0;
+    playing = false;
+    syncUI(false);
+  } else {
+    audio.play().catch(() => {});
+    playing = true;
+    syncUI(true);
+  }
+}
+
+function syncUI(p) {
+  playIcon.style.display = p ? 'none' : 'block';
+  pauseIcon.style.display = p ? 'block' : 'none';
+  floatPlayIcon.style.display = p ? 'none' : 'block';
+  floatPauseIcon.style.display = p ? 'block' : 'none';
+}
+
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration) return;
+  const t = audio.currentTime;
+  const pct = (t / audio.duration) * 100;
+  progressFill.style.width = pct + '%';
+  timeDisplay.textContent = fmt(t) + ' / ' + fmt(audio.duration);
+  const circumference = 53.4;
+  floatRing.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+  floatTimeEl.textContent = fmt(t);
+  const idx = sections.findIndex(s => t >= s.start && t < s.end);
+  if (idx !== currentSection) {
+    document.querySelectorAll('.section.playing').forEach(el => el.classList.remove('playing'));
+    if (idx >= 0) {
+      const el = document.getElementById(sections[idx].id);
+      if (el) el.classList.add('playing');
+    }
+    currentSection = idx;
+    playerMeta.textContent = idx >= 0 ? '正在播报：' + sections[idx].label : '播报结束';
+  }
+});
+
+audio.addEventListener('ended', () => {
+  playing = false;
+  syncUI(false);
+  playerMeta.textContent = '播报结束';
+  document.querySelectorAll('.section.playing').forEach(el => el.classList.remove('playing'));
+  currentSection = -1;
+});
+
+function seekAudio(e) {
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  if (audio.duration) audio.currentTime = pct * audio.duration;
+}
+
+new IntersectionObserver(([entry]) => {
+  floatingBtn.classList.toggle('show', !entry.isIntersecting && playing);
+  floatingProgress.classList.toggle('show', !entry.isIntersecting && playing);
+}, { threshold: 0.1 }).observe(document.getElementById('audioPlayer'));
+</script>
+</body>
+</html>
