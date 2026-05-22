@@ -5,510 +5,523 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>每日新闻总结 · 2026-05-22</title>
 <style>
-  :root {
-    --bg: #0f1117;
-    --card: #1a1d27;
-    --border: #2a2d3e;
-    --accent: #6c8fff;
-    --text: #e2e4ef;
-    --muted: #8888a0;
-    --up: #4ade80;
-    --down: #f87171;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    padding: 20px 20px 80px;
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  h1 { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
-  .audio-player { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
-  .play-btn { background: var(--accent); border: none; border-radius: 50%; width: 18px; height: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .play-btn svg { width: 8px; height: 8px; flex-shrink: 0; }
-  .player-info { flex: 1; }
-  .player-title { font-size: 12px; color: var(--text); font-weight: 600; }
-  .player-meta { font-size: 11px; color: var(--muted); }
-  .progress-bar { width: 100%; height: 3px; background: var(--border); border-radius: 2px; margin: 4px 0; cursor: pointer; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0%; transition: width 0.1s; }
-  .time-display { font-size: 10px; color: var(--muted); font-family: monospace; }
-  .floating-btn { position: fixed; bottom: 20px; right: 20px; z-index: 999; background: var(--accent); border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(108,143,255,0.4); }
-  .floating-btn.show { display: flex; }
-  .floating-btn svg { width: 8px; height: 8px; flex-shrink: 0; }
-  .floating-progress { position: fixed; bottom: 48px; right: 20px; z-index: 999; width: 20px; display: none; flex-direction: column; align-items: center; gap: 2px; }
-  .floating-progress.show { display: flex; }
-  .floating-time { font-size: 8px; color: var(--muted); font-family: monospace; text-align: center; }
-  .floating-ring { width: 20px; height: 20px; transform: rotate(-90deg); }
-  .floating-ring circle { fill: none; stroke-width: 2; }
-  .floating-ring .bg { stroke: var(--border); }
-  .floating-ring .fg { stroke: var(--accent); stroke-linecap: round; }
-  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 28px 0 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-  .market-bar { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin-bottom: 24px; }
-  .market-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; text-align: center; }
-  .market-item .name { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
-  .market-item .price { font-size: 14px; font-weight: 700; color: var(--text); }
-  .market-item .change { font-size: 11px; font-weight: 600; }
-  .up { color: var(--up); }
-  .down { color: var(--down); }
-  .news-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; position: relative; }
-  .rank { position: absolute; top: 12px; right: 14px; font-size: 16px; }
-  .top1 { color: #ffd700; }
-  .top2 { color: #c0c0c0; }
-  .top3 { color: #cd7f32; }
-  h4 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 8px; line-height: 1.5; }
-  .summary { font-size: 13px; color: var(--text); margin-bottom: 8px; line-height: 1.7; }
-  .source { font-size: 11px; color: var(--muted); }
-  .source a { color: var(--accent); text-decoration: none; }
-  .section { margin-bottom: 8px; }
-  .section.playing { border-color: var(--accent); box-shadow: 0 0 20px rgba(108,143,255,0.15); }
-  .now-playing { position: absolute; left: -1px; top: 50%; transform: translateY(-50%); width: 3px; height: 60%; background: var(--accent); border-radius: 0 2px 2px 0; opacity: 0; transition: opacity 0.3s; }
-  .section.playing .now-playing { opacity: 1; }
-  .jin10-item a { color: var(--text); text-decoration: none; display: block; }
-  .jin10-item a:hover { color: var(--accent); }
-  footer { margin-top: 60px; text-align: center; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 24px; }
-  footer a { color: var(--accent); text-decoration: none; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f1117;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;padding-bottom:60px}
+a{color:#6c8fff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.market-bar{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px;background:#1a1d27;border-bottom:1px solid #2a2d3e;position:sticky;top:0;z-index:100}
+.market-item{display:flex;flex-direction:column;align-items:center;padding:4px 8px;background:#252836;border-radius:6px;min-width:60px}
+.mname{font-size:9px;color:#888;margin-bottom:2px}
+.mprice{font-size:11px;font-weight:600;color:#e8e8e8}
+.mpct{font-size:9px}
+
+h1{text-align:center;padding:20px 16px 4px;font-size:20px;font-weight:700;color:#fff}
+.subtitle{text-align:center;color:#666;font-size:11px;margin-bottom:20px}
+
+.section{padding:0 16px 24px}
+.section h2{font-size:15px;color:#fff;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #2a2d3e;display:flex;align-items:center;gap:6px}
+
+.news-card{background:#1a1d27;border:1px solid #2a2d3e;border-radius:10px;padding:14px;margin-bottom:10px;position:relative}
+.rank{position:absolute;top:10px;right:12px;font-size:16px}
+.news-card h4{font-size:14px;color:#e8e8e8;margin-bottom:8px;padding-right:30px;line-height:1.4}
+.news-card .summary{font-size:12px;color:#aaa;line-height:1.7;margin-bottom:8px}
+.news-card .taolu{font-size:11px;color:#7a7a8a;line-height:1.6;font-style:italic}
+.news-card .source{font-size:10px;color:#555;margin-top:8px}
+
+footer{text-align:center;padding:24px 16px;color:#444;font-size:11px;border-top:1px solid #2a2d3e;margin-top:32px}
+footer a{color:#6c8fff}
 </style>
 </head>
 <body>
 
 <h1>每日新闻总结 · 2026-05-22</h1>
-<div class="subtitle">由 Hermes AI 生成 · 2026-05-22 15:37</div>
+<div class="subtitle">由 Hermes AI 生成 · 📅 2026-05-22</div>
 
-<!-- Audio Player -->
-<div class="audio-player" id="audioPlayer">
-  <div class="now-playing"></div>
-  <button class="play-btn" id="playBtn" onclick="toggleAudio()">
-    <svg id="playIcon" width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-    <svg id="pauseIcon" width="8" height="8" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-  </button>
-  <div class="player-info">
-    <div class="player-title">🎧 语音版 · 2026-05-22</div>
-    <div class="player-meta" id="playerMeta">点击播放</div>
-    <div class="progress-bar" id="progressBar" onclick="seekAudio(event)">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
-  </div>
-  <audio id="newsAudio" src="audio/2026-05-22.ogg"></audio>
-</div>
+<div class="market-bar"><div class="market-item"><span class="mname">S&P 500</span><span class="mprice" style="color:#34c759">$7,445.72</span><span class="mpct" style="color:#34c759">▲ +0.17%</span></div><div class="market-item"><span class="mname">Nasdaq</span><span class="mprice" style="color:#34c759">$26,293.10</span><span class="mpct" style="color:#34c759">▲ +0.09%</span></div><div class="market-item"><span class="mname">Nasdaq 100</span><span class="mprice" style="color:#34c759">$29,357.27</span><span class="mpct" style="color:#34c759">▲ +0.20%</span></div><div class="market-item"><span class="mname">Dow Jones</span><span class="mprice" style="color:#34c759">$50,285.66</span><span class="mpct" style="color:#34c759">▲ +0.55%</span></div><div class="market-item"><span class="mname">Gold</span><span class="mprice" style="color:#ff3b30">$4,521.20</span><span class="mpct" style="color:#ff3b30">▼ -0.41%</span></div><div class="market-item"><span class="mname">WTI Oil</span><span class="mprice" style="color:#34c759">$98.62</span><span class="mpct" style="color:#34c759">▲ +2.36%</span></div><div class="market-item"><span class="mname">FTSE 100</span><span class="mprice" style="color:#34c759">$10,485.03</span><span class="mpct" style="color:#34c759">▲ +0.40%</span></div><div class="market-item"><span class="mname">DAX</span><span class="mprice" style="color:#34c759">$24,768.18</span><span class="mpct" style="color:#34c759">▲ +0.66%</span></div><div class="market-item"><span class="mname">CAC 40</span><span class="mprice" style="color:#34c759">$8,128.55</span><span class="mpct" style="color:#34c759">▲ +0.53%</span></div><div class="market-item"><span class="mname">KWEB</span><span class="mprice" style="color:#ff3b30">$27.63</span><span class="mpct" style="color:#ff3b30">▼ -1.74%</span></div><div class="market-item"><span class="mname">MCHI</span><span class="mprice" style="color:#ff3b30">$55.96</span><span class="mpct" style="color:#ff3b30">▼ -1.17%</span></div><div class="market-item"><span class="mname">Apple</span><span class="mprice" style="color:#34c759">$304.99</span><span class="mpct" style="color:#34c759">▲ +0.91%</span></div><div class="market-item"><span class="mname">Nvidia</span><span class="mprice" style="color:#ff3b30">$219.51</span><span class="mpct" style="color:#ff3b30">▼ -1.77%</span></div><div class="market-item"><span class="mname">Amazon</span><span class="mprice" style="color:#34c759">$268.46</span><span class="mpct" style="color:#34c759">▲ +1.30%</span></div><div class="market-item"><span class="mname">Tesla</span><span class="mprice" style="color:#34c759">$417.85</span><span class="mpct" style="color:#34c759">▲ +0.14%</span></div></div>
 
-<!-- Floating Controls -->
-<div class="floating-btn" id="floatingBtn" onclick="toggleAudio()">
-  <svg id="floatPlayIcon" width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-  <svg id="floatPauseIcon" width="8" height="8" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-</div>
-<div class="floating-progress" id="floatingProgress">
-  <svg class="floating-ring" viewBox="0 0 20 20">
-    <circle class="bg" cx="10" cy="10" r="8.5"/>
-    <circle class="fg" id="floatRing" cx="10" cy="10" r="8.5" stroke-dasharray="53.4" stroke-dashoffset="53.4"/>
-  </svg>
-  <div class="floating-time" id="floatTime">0:00</div>
-</div>
-
-<!-- MARKET BAR -->
-<div class="section-label">📊 市场行情</div>
-<div class="market-bar">
-  <div class="market-item"><div class="name">S&P 500</div><div class="price">7,445.72</div><div class="change up">+0.17%</div></div>
-  <div class="market-item"><div class="name">Nasdaq</div><div class="price">26,293.10</div><div class="change up">+0.09%</div></div>
-  <div class="market-item"><div class="name">Dow Jones</div><div class="price">50,285.66</div><div class="change up">+0.55%</div></div>
-  <div class="market-item"><div class="name">Gold</div><div class="price">$4,525.30</div><div class="change down">-0.32%</div></div>
-  <div class="market-item"><div class="name">WTI Oil</div><div class="price">$98.17</div><div class="change up">+1.89%</div></div>
-  <div class="market-item"><div class="name">DAX</div><div class="price">24,812.20</div><div class="change up">+0.83%</div></div>
-  <div class="market-item"><div class="name">KWEB</div><div class="price">$27.63</div><div class="change down">-1.74%</div></div>
-  <div class="market-item"><div class="name">NVDA</div><div class="price">$219.51</div><div class="change down">-1.77%</div></div>
-  <div class="market-item"><div class="name">AAPL</div><div class="price">$304.99</div><div class="change up">+0.91%</div></div>
-  <div class="market-item"><div class="name">AMZN</div><div class="price">$268.46</div><div class="change up">+1.30%</div></div>
-</div>
-
-<!-- SECTION: FINANCE -->
+<!-- 金融市场 -->
 <div class="section" id="sec-finance">
-  <div class="section-label">🏛️ 金融市场</div>
+<h2>🏛️ 金融市场</h2>
 
-  <div class="news-card">
-    <span class="rank top1">🥇</span>
-    <h4>特朗普政策急转：将向波兰增派5000名美军</h4>
-    <p class="summary">特朗普政府宣布将向波兰增派约5000名美军士兵，此举被视为北约东翼防御的重大升级。此消息引发欧洲地缘政治紧张情绪升温，市场对中东和欧洲局势的担忧加剧，能源价格随之波动。</p>
-    <p class="source">💬 吐槽：美军全球部署从来不嫌多，波兰这5000人，怕是又要让欧洲各国的"国防预算GDP占比2%"目标白提了。</p>
-    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <span class="rank top2">🥈</span>
-    <h4>霍尔木兹海峡若关闭至8月，经济衰退风险堪比新冠</h4>
-    <p class="summary">伊朗驻法国大使透露正酝酿在霍尔木兹海峡建立"永久军事存在"，而霍尔木兹海峡是全球约20%石油运输的咽喉要道。分析师警告，若持续封锁至8月，全球经济衰退风险将达到"新冠级别"，国际油价应声大涨，WTI原油单日飙升1.89%。</p>
-    <p class="source">💬 吐槽：伊朗这一招"卡脖子"，比任何OPEC+减产都管用，就是不知道沙特和美国作何感想。</p>
-    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <span class="rank top3">🥉</span>
-    <h4>黄金的"黄金十年"进入下半场，机构给出8900美元目标价</h4>
-    <p class="summary">全球最大债券基金Pimco首席投资官表示，若美债收益率继续飙升，美联储可能被迫重新考虑货币政策走向。与此同时，多家机构上调黄金目标价，最高给出8900美元/盎司的目标，认为地缘风险和央行购金潮将持续推动金价上涨。日内黄金小幅回调0.32%，报4525美元。</p>
-    <p class="source">💬 吐槽：这些机构的目标价听听就好，当年"2000美元是黄金天花板"的预测还没过去几年呢。</p>
-    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>Pimco首席投资官：若收益率继续飙升，美联储或被迫转向</h4>
-    <p class="summary">全球最大债券基金Pimco首席投资官发出警告，称若美债收益率持续上行，美联储可能被迫调整当前货币政策方向。市场目前对美联储降息预期已大幅降温，利率期货显示年内降息概率不足40%，美股随之承压。</p>
-    <p class="source">💬 吐槽：美联储一会儿"通胀暂时论"，一会儿"激进加息"，现在又说可能转向——反正市场永远猜不对美联储的心思。</p>
-    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>伊朗驻法国大使：正酝酿在霍尔木兹建立"永久军事存在"</h4>
-    <p class="summary">伊朗驻法国大使公开表示，伊朗正计划在霍尔木兹海峡建立永久性军事存在。该海峡每日承载全球近20%的石油运输，一旦伊朗强化军事部署，全球能源市场将面临巨大不确定性，国际油价本周已累计上涨超过3%。</p>
-    <p class="source">💬 吐槽：霍尔木兹这地方，谁控制了谁就掐住了世界经济的命脉，伊朗深谙此道。</p>
-    <div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>美股周四小幅收涨，道指领涨 0.55%</h4>
+<p class="summary">美股周四震荡收涨，道指上涨276点至50285点，纳指微涨0.09%表现平淡，标普500涨0.17%。苹果涨0.91%表现科技股中最强，AMD涨0.45%，特斯拉微涨0.14%。英伟达跌1.77%较弱。中概股继续下挫，KWEB跌1.74%，MCHI跌1.17%。欧股普遍上涨，DAX涨0.66%。</p>
+<p class="taolu">💬 道指已经摸到50285了，距离5万点心理大关还远吗？</p>
+<div class="source">📡 Yahoo Finance | <a href="https://finance.yahoo.com/" target="_blank">查看原文</a></div>
 </div>
 
-<!-- SECTION: FOOTBALL -->
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>霍尔木兹海峡若关闭至8月，经济衰退风险堪比新冠</h4>
+<p class="summary">金十数据显示，市场对霍尔木兹海峡局势的担忧持续升温。若海峡关闭持续至8月，经济衰退风险恐堪比新冠时期。伊朗驻法国大使透露正在酝酿在海峡建立"永久防御"，而阿拉伯电视台已驳斥此前关于美伊达成协议的报道。</p>
+<p class="taolu">💬 霍尔木兹一堵，全球油价抖三抖，98美元的油价恐怕还没到头。</p>
+<div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>特朗普将向波兰增派5000名美军，地缘风险持续</h4>
+<p class="summary">金十数据快讯显示，特朗普政府政策急转，决定向波兰增派5000名美军。在欧洲地缘紧张局势持续升级的背景下，此举将进一步加剧美俄之间的博弈。</p>
+<p class="taolu">💬 波兰成了美军在欧洲的最大前沿基地，俄罗斯那边估计又要开会了。</p>
+<div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>黄金回调失守4530美元，机构仍看涨至8900美元</h4>
+<p class="summary">金价周四下跌0.41%逼近4521美元。Pimco首席投资官警告，若收益率继续飙升，美联储可能面临更大压力。但机构仍看好黄金的长期前景，有机构给出黄金"黄金十年"的目标价高达8900美元。</p>
+<p class="taolu">💬 黄金下跌只是中场休息，长期逻辑没变。</p>
+<div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>WTI原油大涨2.36%逼近99美元，霍尔木兹担忧推升油价</h4>
+<p class="summary">受霍尔木兹海峡局势影响，WTI原油周四大幅上涨2.36%至98.62美元。分析师警告若海峡关闭持续，全球供应链将受到严重冲击。</p>
+<p class="taolu">💬 98美元的油价，加满一箱油感觉心在滴血。</p>
+<div class="source">📡 Yahoo Finance | <a href="https://finance.yahoo.com/" target="_blank">查看原文</a></div>
+</div>
+</div>
+
+<!-- 足球 -->
 <div class="section" id="sec-football">
-  <div class="section-label">⚽ 足球</div>
+<h2>⚽ 足球</h2>
 
-  <div class="news-card">
-    <span class="rank top1">🥇</span>
-    <h4>冲冠！U17国少亚洲杯决赛明晨开战，日本成最后对手</h4>
-    <p class="summary">中国2008年龄段U17男足国家队在亚洲杯半决赛中表现出色，成功晋级决赛。明晨，球队将与日本队争夺本届赛事冠军。这是中国男足各级别队伍近年来首次杀入洲际大赛决赛，能否夺冠拭目以待。</p>
-    <p class="source">💬 吐槽：这么多年了，终于有支球队敢喊"冲冠"二字。不管结果如何，先给小将们鼓个掌！</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <span class="rank top2">🥈</span>
-    <h4>英媒透露英格兰世界杯26人完整名单：凯恩&赖斯领衔</h4>
-    <p class="summary">英格兰代表队世界杯大名单遭媒体提前曝光，热刺中锋凯恩和阿森纳中场赖斯领衔，曼城的帕尔默意外落选，切尔西后卫斯彭斯出人意料地压线入选，而阿诺德则名落孙山。利物浦主帅对此表示"完全无法理解"。</p>
-    <p class="source">💬 吐槽：帕尔默落选图赫尔说了算，斯彭斯入选图赫尔也说了算——这位德国教头的心思比量子力学还难懂。</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>直播吧：帕尔默无缘英格兰世界杯大名单，图赫尔做的决定</h4>
-    <p class="summary">英格兰新星帕尔默意外落选世界杯大名单，据多家媒体证实，这是新任英格兰主帅图赫尔做出的决定。帕尔默本赛季在曼城表现出色，他的落选引发了英格兰足坛的广泛讨论，球迷和专家均感意外。</p>
-    <p class="source">💬 吐槽：图赫尔刚接手英格兰队就"开翻航母"，不知道世界杯时会不会后悔这个决定。</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>多家媒体：热刺后卫斯彭斯入选英格兰世界杯大名单</h4>
-    <p class="summary">就在帕尔默落选的消息引发争议的同时，热刺后卫斯彭斯却成功入选英格兰世界杯大名单。这两则消息同时公布，让英格兰球迷心情复杂。斯彭斯本赛季在热刺并非绝对主力，此次入选被认为是一大惊喜。</p>
-    <p class="source">💬 吐槽：斯彭斯入选，帕尔默落选——图赫尔这是要用行动告诉全世界：我选人凭的是玄学。</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>将参加土伦杯！U19大名单：吴启鹏、魏祥鑫、张家鸣、苗润东在列</h4>
-    <p class="summary">中国U19国家队公布土伦杯参赛名单，吴启鹏、魏祥鑫、张家鸣和苗润东等年轻球员入选。土伦杯是国际足联认定的正式青年赛事，中国队此次以练兵为主，为未来更大赛事储备人才。</p>
-    <p class="source">💬 吐槽：U17冲冠，U19土伦杯——中国足球的下一代正在多点开花，希望这次不只是"昙花一现"。</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>英格兰世界杯大名单：凯恩赖斯领衔，拉什福德入选，帕尔默落选</h4>
+<p class="summary">英媒披露英格兰世界杯26人完整名单：凯恩和赖斯领衔，拉什福德入选，但帕尔默图赫尔做决定无缘大名单，阿诺德同样落选。多家媒体确认热刺后卫斯彭斯压哨入选。</p>
+<p class="taolu">💬 帕尔默落选是最大冷门，切尔西球迷估计要炸锅。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
 </div>
 
-<!-- SECTION: BASKETBALL -->
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>U17国少亚洲杯决赛今晚迎战日本，为少年们加油！</h4>
+<p class="summary">中国U17国少将在今晚的亚洲杯决赛中对阵日本队，这是中国足球新生代冲击亚洲之巅的重要一战，足球圈呼吁球迷为少年们加油助威。</p>
+<p class="taolu">💬 少年强则国强，今晚和日本的对决，值得熬夜一看。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>36岁阿斯皮利奎塔退役，结束20年职业生涯</h4>
+<p class="summary">曾效力切尔西和马竞的36岁西班牙后卫阿斯皮利奎塔正式宣布退役，结束长达20年的职业生涯。他代表西班牙国家队出场60次，是切尔西黄金时代的后防核心。</p>
+<p class="taolu">💬 铁人退役，马竞和切尔西的球迷都该记住这个名字。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>张玉宁、谢文能领衔亚运队超龄候选阵容</h4>
+<p class="summary">中国亚运队正在组建超龄球员候选阵容，张玉宁、谢文能、高天意等中超主力球员在列。亚运会足球比赛将是这批球员为国效力的重要舞台。</p>
+<p class="taolu">💬 亚运会足球比赛含金量不低，能参加也是荣誉。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>罗马诺：帕尔默无缘英格兰世界杯大名单</h4>
+<p class="summary">知名转会记者罗马诺确认，切尔西边锋帕尔默将无缘英格兰世界杯大名单，图赫尔做出了这个决定。这位赛季表现出色的攻击手落选引发英格兰足坛热议。</p>
+<p class="taolu">💬 罗马诺的话基本就是定论了，帕尔默球迷接受现实吧。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+</div>
+
+<!-- 篮球 -->
 <div class="section" id="sec-basketball">
-  <div class="section-label">🏀 篮球</div>
+<h2>🏀 篮球</h2>
 
-  <div class="news-card">
-    <span class="rank top1">🥇</span>
-    <h4>🏀尼克斯2-0骑士 哈特新高26分 布伦森19分14助</h4>
-    <p class="summary">NBA东部决赛第二场，尼克斯主场再下一城，以2比0领先骑士。哈特刷新个人季后赛得分新高砍下26分，布伦森贡献19分14助攻的全面数据，米切尔空砍26分难救主。骑士在比赛中一度被打了14比0，但米切尔在替补席上淡定涂抹唇膏的画面成为了球迷热议的话题。</p>
-    <p class="source">💬 吐槽：米切尔被打了14-0还在淡定涂唇膏，这心理素质比我高考数学最后一道大题不会做时还稳。</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <span class="rank top2">🥈</span>
-    <h4>💥CBA乐透抽签：四川状元签 江苏榜眼 天津探花</h4>
-    <p class="summary">CBA联赛乐透抽签结果出炉，四川队获得状元签，江苏队拿到榜眼，天津队摘得探花。这三支球队上赛季战绩不佳，因此获得乐透抽签的资格。四川队将手握状元签，有望在今夏引进强援征战下赛季。</p>
-    <p class="source">💬 吐槽：四川球迷终于等来了一个状元签的希望——上一个四川状元秀是谁来着？好像没怎么打出来……</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>登哥季后赛12场0失误！曾高效砍30分 也曾14中2</h4>
-    <p class="summary">哈登在季后赛中的表现引发球迷热议，数据显示他在12场季后赛中保持0失误的惊人记录。但与此同时，他的表现也呈现极大波动——既有单场高效砍下30分的发挥，也有单场14投仅2中的低迷状态，这种"双面登"让火箭球迷爱恨交织。</p>
-    <p class="source">💬 吐槽：12场0失误是真的强，14中2也是真的铁——登哥的季后赛就像开盲盒，你永远不知道今天开出来的是哪个版本。</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>西决巨大争议！雷霆哈滕拉扯卡斯尔头发 离谱到家</h4>
-    <p class="summary">西部决赛中出现极具争议的一幕，雷霆球员哈滕在防守中拉扯独行侠新秀卡斯尔的头发，当值裁判当场判罚争议，赛后这一动作引发社交媒体疯狂讨论。有网友甚至用AI将这一画面做成了"世界名画"，迅速传播开来。</p>
-    <p class="source">💬 吐槽：哈滕这动作篮球场罕见，建议他下次直接去WWE发展，那边允许拉扯头发，还能顺便出道。</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>文胖：到7月1日湖人还没得到詹姆斯明确答复 他们可能放弃其鸟权</h4>
-    <p class="summary">NBA名记文霍斯特在一档节目中透露，湖人队方面已经给詹姆斯下了"最后通牒"——到7月1日若仍未得到关于续约的明确答复，湖人可能会选择放弃詹姆斯的鸟权。这将是NBA历史上一次罕见的操作，意味着詹姆斯将以自由球员身份进入市场。</p>
-    <p class="source">💬 吐槽：詹姆斯40岁还要被威胁放弃鸟权，湖人这波操作简直是"卸磨杀驴"的经典教学。</p>
-    <div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>NBA东决G2：尼克斯2-0骑士，哈特26分创新高</h4>
+<p class="summary">NBA东部决赛G2，尼克斯主场再胜骑士，总比分2-0领先。哈特砍下26分刷新生涯季后赛新高，布伦森贡献19分14助攻，米切尔空砍26分骑士陷入绝境。</p>
+<p class="taolu">💬 骑士0-2落后，美记：大桥在纽约用5个首轮交易得到他之后一直面临巨大压力。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
 </div>
 
-<!-- SECTION: TENNIS -->
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>CBA乐透抽签：四川获状元签，江苏榜眼天津探花</h4>
+<p class="summary">CBA联赛乐透抽签结果出炉，四川金强获得状元签，江苏肯帝亚获得榜眼签，天津荣钢获得探花签。这三支球队将在新赛季获得优先选人机会。</p>
+<p class="taolu">💬 四川球迷终于等来了好消息，状元签到手！</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>美记：热火酝酿报价字母哥，希罗+小海梅+韦尔+13号签+两首轮</h4>
+<p class="summary">迈阿密当地媒体报道，热火正在酝酿向雄鹿提出交易字母哥的报价，筹码包括希罗、小海梅、韦尔、13号签以及未来两个首轮选秀权，但目前尚不清楚雄鹿是否愿意交易这位两届MVP。</p>
+<p class="taolu">💬 热火梭哈了，字母哥联手巴特勒？这筹码够诚意了吧。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>马刺官方：哈珀右侧内收肌酸痛，G3出战成疑</h4>
+<p class="summary">马刺官方更新伤情报告，哈珀遭遇右侧内收肌酸痛，G3出战成疑。西决系列赛雷霆目前以2-0领先马刺，若哈珀缺阵马刺形势将更加严峻。</p>
+<p class="taolu">💬 0-2落后再伤主力，马刺这个赛季的运气实在不佳。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>巴克利为雷霆辩护：别跟风吐槽文班事件了</h4>
+<p class="summary">针对雷霆与马刺系列赛中出现的争议动作（哈滕拉扯卡斯尔头发），NBA名宿巴克利公开为雷霆辩护，他表示自己接吻都比这动作更激烈，呼吁球迷不要跟风吐槽。</p>
+<p class="taolu">💬 巴克利这话糙理不糙，NBA对抗本来就很激烈。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+</div>
+
+<!-- 网球 -->
 <div class="section" id="sec-tennis">
-  <div class="section-label">🎾 网球</div>
+<h2>🎾 网球</h2>
 
-  <div class="news-card">
-    <span class="rank top1">🥇</span>
-    <h4>法网女单签表出炉：郑钦文vs资格赛选手 萨巴伦卡vs佩古拉</h4>
-    <p class="summary">2026年法国网球公开赛女单正赛签表正式揭晓，中国金花郑钦文首轮对阵一名资格赛选手，整体签运尚可。萨巴伦卡首轮对阵美国好手佩古拉，两人若均顺利晋级将在八强阶段遭遇。白卓璇和王欣瑜也将在首轮面临考验。</p>
-    <p class="source">💬 吐槽：郑钦文首轮抽到资格赛选手，已经算是法网给面子了——希望她别把这当成"送分题"给浪费了。</p>
-    <div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <span class="rank top2">🥈</span>
-    <h4>斯特拉斯堡WTA500：张帅1-2负于纳瓦罗，止步八强</h4>
-    <p class="summary">中国老将张帅在斯特拉斯堡站女单八强战中苦战三盘，以1比2不敌西班牙选手纳瓦罗，遗憾止步八强。虽然未能更进一步，但张帅此前连续击败多位强敌晋级八强，已经创造了今年个人最佳战绩。</p>
-    <p class="source">💬 吐槽：张帅止步八强略有遗憾，但考虑到她今年一直饱受伤病困扰，能打到八强已经是意外之喜，老将不易。</p>
-    <div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>法网男单签表：辛纳vs谢尔顿 吴易昺vs吉隆</h4>
-    <p class="summary">法网男单正赛签表揭晓，卫冕冠军辛纳首轮对阵美国选手谢尔顿，中国球员吴易昺首轮抽到吉隆，张之臻则将在首轮遭遇一位资格赛选手。整体签表对中国球员而言机遇与挑战并存。</p>
-    <p class="source">💬 吐槽：辛纳首轮对手虽然是谢尔顿，但别忘了去年法网正是谢尔顿把辛纳逼到过五盘——签表这东西，真不能光看名字。</p>
-    <div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>郭涵煜首进大满贯正赛！法网女单资格赛决胜轮取胜</h4>
-    <p class="summary">中国球员郭涵煜在法网女单资格赛决胜轮中战胜对手，成功晋级正赛，这将是中国球员首次亮相大满贯女单正赛。此外，王曦雨和高馨妤等中国球员也顺利从资格赛突围，法网正赛中国军团人数创新高。</p>
-    <p class="source">💬 吐槽：以前看法网是看郑钦文独苗，今年突然多了一整个"中国阵容"——幸福来得太突然。</p>
-    <div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>法网中国球员首轮对阵：郑钦文、王欣瑜、张之臻等人出战</h4>
-    <p class="summary">法网官方公布了正赛首轮的对阵安排，中国军团多位球员出战。郑钦文、王欣瑜、张之臻、吴易昺等球员悉数在列，整体签表难度适中，能否集体突破首轮轮成为中国球迷关注的焦点。</p>
-    <p class="source">💬 吐槽：中国球员这次签运不错，希望别集体"首轮游"，要不然后面的报道都没素材写了。</p>
-    <div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>法网女单签表出炉：郑钦文首轮对阵资格赛选手，萨巴伦卡vs佩古拉</h4>
+<p class="summary">法网官方公布女单正赛签表，中国金花郑钦文首轮抽到资格赛选手，如能晋级可能提前遭遇高芙。王欣瑜、张之臻等中国球员签运各异。萨巴伦卡首轮对阵佩古拉，是本届赛事最受关注的揭幕战之一。</p>
+<p class="taolu">💬 郑钦文的签运不错，首轮资格赛选手是抢分的好机会。</p>
+<div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
 </div>
 
-<!-- SECTION: F1 -->
-<div class="section" id="sec-f1">
-  <div class="section-label">🏎️ F1</div>
-
-  <div class="news-card">
-    <span class="rank top1">🥇</span>
-    <h4>比亚迪进军F1新进展：正与前红牛领队霍纳洽谈合作</h4>
-    <p class="summary">比亚迪进军F1传来重大进展，据多方消息证实，比亚迪正在与前红牛车队领队霍纳进行合作洽谈。霍纳曾是红牛王朝的核心人物，若合作达成，比亚迪将以引擎供应商或车队赞助商的身份正式进入F1围场。</p>
-    <p class="source">💬 吐槽：比亚迪从电动车杀到F1，这剧本比贾跃亭的PPT还让人热血沸腾——就是不知道"价格油电同价"的比亚迪F1会卖多少钱。</p>
-    <div class="source">📡 网易体育 | <a href="https://sports.163.com/f1/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <span class="rank top2">🥈</span>
-    <h4>F1七冠王汉密尔顿：我并未考虑退役，仍计划在这里待一段时间</h4>
-    <p class="summary">F1传奇车手汉密尔顿在接受媒体采访时明确表示，自己目前并没有退役的打算，仍计划在F1赛场继续征战一段时间。尽管近年来成绩有所下滑，但七冠王表示他依然热爱这项运动，希望能以最佳状态完成职业生涯的后半段。</p>
-    <p class="source">💬 吐槽：老汉说"待一段时间"——翻译一下就是：合同到期前我不会主动走，但法拉利什么时候来找我我也不拒绝。</p>
-    <div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>把NASCAR开成街头斗殴的Kyle Busch，宣布退役</h4>
-    <p class="summary">纳斯卡传奇车手Kyle Busch正式宣布退役，结束了他在NASCAR长达20多年的职业生涯。Busch以其凶悍的驾驶风格著称，多次在比赛中与其他车手发生冲突，甚至曾因在维修站通道"开碰碰车"而被戏称为"街头斗殴专业户"。</p>
-    <p class="source">💬 吐槽：Kyle Busch的退役，堪称NASCAR"坏人"天花板级别的落幕——以后纳斯卡少了一个最会搞事的狠人，观众少了很多乐趣。</p>
-    <div class="source">📡 网易体育 | <a href="https://sports.163.com/f1/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>"张雪机车"车手德比斯直播首秀，张雪现身当"榜一大哥"</h4>
-    <p class="summary">网红赛车手"张雪机车"的签约车手德比斯迎来直播首秀，张雪本人亲自现身直播间狂刷礼物，瞬间登顶"榜一大哥"位置。张雪在直播中表示，愿意"掏空家底"支持车手的职业梦想，引发粉丝热烈讨论。</p>
-    <p class="source">💬 吐槽：这波操作堪称"网红经济+F1"融合的典范，就是不知道德比斯的赛车实力能不能配得上这份排面。</p>
-    <div class="source">📡 网易体育 | <a href="https://sports.163.com/f1/" target="_blank">查看原文</a></div>
-  </div>
-
-  <div class="news-card">
-    <h4>偶像赛场相聚！领克03+ TCR定格难忘竞速瞬间</h4>
-    <p class="summary">领克03+ TCR车队在近日赛事中传来好消息，多位车手在赛道上留下了精彩瞬间。领克03+ TCR作为中国品牌首款量产性能车参加国际TCR赛事，填补了中国汽车品牌在高端房车赛领域的空白。</p>
-    <p class="source">💬 吐槽：领克这波操作把"中国性能车"这块牌子打出去了——就是希望以后别只在国内转悠，也去国际赛场见见世面。</p>
-    <div class="source">📡 网易体育 | <a href="https://sports.163.com/f1/" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>郭涵煜法网资格赛突围，首次出战大满贯正赛</h4>
+<p class="summary">中国网球传来捷报，郭涵煜在法网女单资格赛决胜轮中取得胜利，成功晋级正赛。这将是她职业生涯首次站上大满贯正赛舞台，王曦雨、高馨妤等中国网协球员也已晋级资格赛次轮。</p>
+<p class="taolu">💬 又一位中国金花突围而出，期待法网正赛首秀！</p>
+<div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
 </div>
 
-<!-- SECTION: CS2 -->
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>斯特拉斯堡WTA500：张帅1-2负于纳瓦罗，止步八强</h4>
+<p class="summary">在斯特拉斯堡WTA500女单四分之一决赛中，中国金花张帅苦战三盘以1-2不敌美国选手纳瓦罗，遗憾止步八强，无缘晋级半决赛。</p>
+<p class="taolu">💬 张帅止步八强有点可惜，但法网才是真正的战场。</p>
+<div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>法网男单签表：辛纳vs谢尔顿，吴易昺vs吉隆</h4>
+<p class="summary">法网男单正赛签表揭晓，辛纳首轮对阵谢尔顿，中国选手吴易昺抽到吉隆，张之臻也将出战正赛。辛纳的晋级之路上可能遭遇德约、梅德韦杰夫等强敌。</p>
+<p class="taolu">💬 吴易昺的签运还行，希望他能在法网有所突破！</p>
+<div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>德约法网晋级之路：辛纳、兹维列夫、卢布列夫环伺</h4>
+<p class="summary">法网官方分析了德约科维奇的晋级之路，塞尔维亚天王可能依次遭遇辛纳、兹维列夫、卢布列夫等强敌。作为夺冠热门之一，德约的第25个大满贯冠军并非板上钉钉。</p>
+<p class="taolu">💬 德约的第25冠，难度不亚于打Boss通关。</p>
+<div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div>
+</div>
+</div>
+
+<!-- 美加墨世界杯 -->
+<div class="section" id="sec-worldcup">
+<h2>🏆 美加墨世界杯 2026</h2>
+
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>英格兰世界杯26人名单曝光：凯恩赖斯领衔，拉什福德入选</h4>
+<p class="summary">英媒提前披露英格兰2026美加墨世界杯26人完整大名单，凯恩和赖斯将领衔锋线，拉什福德压哨入选，但帕尔默和阿诺德遗憾落选，图赫尔做出了这份名单的决定。</p>
+<p class="taolu">💬 帕尔默落选是图赫尔的最大胆决定，也是最大胆的赌博。</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>U17国少今晚亚洲杯决赛对日本，为少年们加油！</h4>
+<p class="summary">中国U17国少将在今晚踏上亚洲杯决赛舞台，对手是强大的日本队。这是中国足球新生代今年最重要的比赛，全队上下希望能用一座冠军奖杯为中国足球注入信心。</p>
+<p class="taolu">💬 不管结果如何，能进决赛就是好样的，少年们加油！</p>
+<div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>沃什时代到来：美联储制度变革图谱</h4>
+<p class="summary">沃什已于今晚11点在美联储正式宣誓履新主席一职，金十数据专题分析沃什时代美联储的制度变革图谱，包括货币政策框架、监管方向以及与市场的沟通策略都将发生深刻变化。</p>
+<p class="taolu">💬 沃什上任的第一把火，全球市场都在盯着看。</p>
+<div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>SpaceX上市文件公布后首场关键试飞延期</h4>
+<p class="summary">SpaceX在公布上市文件后，原本计划进行的"星舰V3"关键试飞因技术原因延期。"星舰V3"的研发进展和商业化前景成为航天市场关注的焦点。</p>
+<p class="taolu">💬 SpaceX一延期，资本市场又要屏息等待了。</p>
+<div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>国家发改委：正在谋划加快人工智能落地的配套文件</h4>
+<p class="summary">国家发改委相关负责人在新闻发布会上透露，正在谋划出台加快人工智能在各行业落地应用的配套文件，涵盖政策支持、算力基础设施建设和人才培养等多个维度。</p>
+<p class="taolu">💬 AI落地这件事，上面是认真的。</p>
+<div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div>
+</div>
+</div>
+
+<!-- CS2 -->
 <div class="section" id="sec-cs2">
-  <div class="section-label">🎮 CS2</div>
+<h2>🎮 CS2</h2>
 
-  <div class="news-card">
-    <span class="rank top1">🥇</span>
-    <h4>V社发布科隆Major贴纸和通行证，贴纸购买和分成方式大改</h4>
-    <p class="summary">Valve在万众期待中正式发布了IEM科隆Major2026的战队贴纸和赛事通行证。今年的贴纸系统迎来了重大改革，贴纸购买方式和收入分成均有大幅调整，既保障了选手和战队的权益，也让粉丝有更多方式支持自己喜欢的队伍。</p>
-    <p class="source">💬 吐槽：V社终于想起来改贴纸分成了——要知道这么多年来，职业选手靠贴纸分成赚的钱可能还不如开一把龙狙来得多，这次总算厚道了一回。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>V社发布科隆Major贴纸和通行证，贴纸购买分成方式大改</h4>
+<p class="summary">V社正式发布IEM科隆Major 2026贴纸和通行证，本次最大的变化是贴纸购买和分成方式都有了重大调整，社区反应热烈，有人支持改革也有人担心影响战队收入，共获得57赞50评论。</p>
+<p class="taolu">💬 V社每次改贴纸规则都能炸出一堆节奏，这次不知道是赚了还是亏了。</p>
+<div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
+</div>
 
-  <div class="news-card">
-    <span class="rank top2">🥈</span>
-    <h4>ESL公布科隆Major揭幕战赛程：TYLOO对阵B8，LVG对阵M80</h4>
-    <p class="summary">ESL官方公布了IEM科隆Major2026揭幕战的对阵安排，中国战队TYLOO将在首轮对阵B8，LVG则遭遇M80。这两场比赛将代表中国CS2战队在全球最高舞台上的最新亮相，意义重大。</p>
-    <p class="source">💬 吐槽：TYLOO首轮打B8——这个抽签运气不错，至少比遇到Vitality或者NaVi好多了。LVG打M80则是硬仗，且看中国双雄能否携手晋级。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>CAC 2026次日：LVG、TYLOO双双淘汰出局</h4>
+<p class="summary">CAC 2026第二个比赛日，中国战队遭遇重创。LVG以0-2不敌PARIVISION，TYLOO以1-2惜败给paiN，双双止步小组赛。Falcons则以2-0击败Legacy抢占先机，Lake赛后表示未能击败Falcons有点遗憾。</p>
+<p class="taolu">💬 两支中国队同一天出局，心疼粉丝。TYLOO那场1-2应该是打得很激烈的。</p>
+<div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
+</div>
 
-  <div class="news-card">
-    <span class="rank top3">🥉</span>
-    <h4>CAC 2026次日赛果：LVG、TYLOO同步淘汰出局</h4>
-    <p class="summary">CAC 2026第二天小组赛传来坏消息，中国两支战队LVG和TYLOO在同一天双双淘汰。LVG以0比2不敌PARIVISION，TYLOO则以1比2惜败给paiN。尽管两队均未能从小组出线，但比赛过程中仍展现出不错的竞技状态。</p>
-    <p class="source">💬 吐槽：两支中国队同日出局，只能用"难兄难弟"来形容了。不过淘汰赛阶段的状态调整才是关键，希望Major开赛前能找回手感。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>m0NESY贴纸致敬s1mple：以此表达对他的尊重</h4>
+<p class="summary">m0NESY在自己的贴纸上添加了致敬s1mple的元素，以此向这位CS传奇选手表达敬意。s1mple目前与B8战队传出绯闻，分析师Petr1k认为s1mple只有去B8替换s1zzi才有争冠机会。</p>
+<p class="taolu">💬 m0NESY是真心崇拜s1mple，这对传奇和新星的传承很感人。</p>
+<div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
+</div>
 
-  <div class="news-card">
-    <h4>Falcons 2-0 Legacy：CAC 2026抢占先机</h4>
-    <p class="summary">CAC 2026小组赛中，Falcons以2比0轻松战胜Legacy，在小组赛中抢占先机。Falcons作为今年崛起的黑马战队，表现出了极强的竞争力，整体状态火热，被认为是今年Major的夺冠热门之一。</p>
-    <p class="source">💬 吐槽：Falcons这状态，不仅仅是"抢占先机"，简直是"预定决赛席位"了——希望CAC上别太早遇到他们。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<h4>ESL公布科隆Major揭幕战赛程：TYLOO对阵B8，LVG对阵M80</h4>
+<p class="summary">ESL官方公布IEM科隆Major揭幕战赛程，中国战队TYLOO将在首轮对阵B8，LVG则迎战M80。这将是两支中国战队在Major舞台上的重要考验。</p>
+<p class="taolu">💬 TYLOO首轮就碰B8，这签运有点意思。</p>
+<div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
+</div>
 
-  <div class="news-card">
-    <h4>分析师Petr1k：s1mple只有去B8替换s1zzi才有争冠机会</h4>
-    <p class="summary">知名CS2分析师Petr1k在一档节目中语出惊人，他表示s1mple若想重返巅峰、争夺冠军，唯一的机会是加盟B8并替换掉现任选手s1zzi。B8近期表现挣扎，若能引进s1mple，将彻底改变战队的竞争力格局。</p>
-    <p class="source">💬 吐槽：s1mple去B8——这建议听起来就像让梅西去踢中超养老一样，理论上能提升成绩，但总觉得哪里不对劲。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<h4>法国ENC国家队阵容揭晓，几无VCT效力选手</h4>
+<p class="summary">法国ENC国家队阵容正式揭晓，这份名单中几乎没有VCT联赛的选手，引发了关于法国CS2人才储备的讨论。社区认为这可能会影响法国在国际赛场上的竞争力。</p>
+<p class="taolu">💬 法国CS2这是要走一条不一样的路？</p>
+<div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
+</div>
+</div>
 
-  <div class="news-card">
-    <h4>LVG喷漆误导NIP引发争议，社区争论职业比赛中是否合规</h4>
-    <p class="summary">在CAC 2026比赛中，LVG选手在一局关键比赛中使用喷漆道具制造视觉干扰，导致对手NIP选手判断失误，引发社区热议。这一行为是否属于"不正当竞争"还是"合理利用规则"，成为了CS2社区争论的焦点。</p>
-    <p class="source">💬 吐槽：CS2里用喷漆干扰对手？建议V社直接把这个也修进bug列表里，和Cache那个一起修。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<!-- GitHub Trending -->
+<div class="section" id="sec-github">
+<h2>🐙 GitHub Trending</h2>
 
-  <div class="news-card">
-    <h4>m0NESY贴纸致敬s1mple：以此表达对他的尊重</h4>
-    <p class="summary">新晋明星选手m0NESY宣布将在个人贴纸中加入致敬s1mple的元素，以此表达对这位CS传奇的尊重。m0NESY被认为是s1mple的"精神接班人"，此次致敬也被视为两位天才选手之间的传承。</p>
-    <p class="source">💬 吐槽：m0NESY现在做贴纸致敬s1mple，等他老了会不会也有小将做贴纸致敬他？CS2的传承，就是这样一代代延续下去的。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>obra/superpowers — 202,056 stars — Agent技能框架</h4>
+<p class="summary">superpowers是一个AI Agent技能框架与软件开发方法论项目，由 obra 开发维护，目前star数已突破20万，是今天star最多的项目，也是GitHub历史上最高热度的项目之一。该项目旨在为AI coding agent提供标准化的技能系统。</p>
+<p class="taolu">💬 20万star！这是什么概念？相当于一个中型国家的人口了。</p>
+<div class="source">📡 GitHub | <a href="https://github.com/obra/superpowers" target="_blank">查看原文</a></div>
+</div>
 
-  <div class="news-card">
-    <h4>OverDrive：PV不可能踢掉nota和xiELO</h4>
-    <p class="summary">知名CS2爆料人OverDrive在直播中透露，关于PV战队即将换人的传闻不实，战队核心选手 nota和xiELO的位置"稳如泰山"。OverDrive以其准确率极高的爆料闻名，此次表态让不少粉丝松了一口气。</p>
-    <p class="source">💬 吐槽：OverDrive说稳，那就稳了——不过CS2这个圈子，换人永远是一句话的事，谁知道明天会不会又来个大新闻。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>multica-ai/andrej-karpathy-skills — 144,232 stars — Karpathy的Claude技能</h4>
+<p class="summary">这个项目包含一个CLAUDE.md文件，基于Andrej Karpathy对LLM coding陷阱的观察改进Claude Code行为，由多CLAUDE团队fork和维护，star数突破14万，是今天第二热门的项目。</p>
+<p class="taolu">💬 Karpathy出品必属精品，14万star说明全世界都在学。</p>
+<div class="source">📡 GitHub | <a href="https://github.com/multica-ai/andrej-karpathy-skills" target="_blank">查看原文</a></div>
+</div>
 
-  <div class="news-card">
-    <h4>IEM科隆Major 2026战队金贴纸总览（第一/二/三阶段）</h4>
-    <p class="summary">V社分三批公布了IEM科隆Major2026所有参赛战队的金贴纸设计，每支战队的贴纸都融入了各自的国家和队伍元素。本届Major金贴纸整体设计水准较高，多支战队的贴纸设计获得粉丝好评，收藏价值备受看好。</p>
-    <p class="source">💬 吐槽：V社分三批出贴纸，这波操作纯属"吊胃口"营销——不过贴纸是真的好看，就是钱包可能撑不住。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>HKUDS/CLI-Anything — 39,355 stars — 让所有软件都Agent原生</h4>
+<p class="summary">CLI-Anything项目的核心理念是"让所有软件都成为Agent-native"，即让AI agent能够通过统一的CLI接口操控一切软件。项目来自香港大学数据科学团队，star数逼近4万，今日新增656star。</p>
+<p class="taolu">💬 Agent要控制一切软件，CLI是最佳接口，这个思路很清晰。</p>
+<div class="source">📡 GitHub | <a href="https://github.com/HKUDS/CLI-Anything" target="_blank">查看原文</a></div>
+</div>
 
-  <div class="news-card">
-    <h4>法国ENC国家队阵容揭晓 几无VCT效力选手</h4>
-    <p class="summary">法国国家队公布了参加ENC（欧洲国家杯）的阵容，令人意外的是，这份名单中几乎没有来自VCT（英雄联盟无畏契约）联赛的选手。法国CS2阵容与VALORANT阵营的"人才争夺战"由来已久，此次名单再次引发了关于赛事兼容性的讨论。</p>
-    <p class="source">💬 吐槽：法国队这个阵容，说白了就是"CS2全明星"——问题是这些选手在VCT那边早就被挖走了，法国V社这边只能用二队阵容撑场面。</p>
-    <div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div>
-  </div>
+<div class="news-card">
+<h4>anthropics/claude-plugins-official — 23,213 stars — Claude官方插件目录</h4>
+<p class="summary">Anthropic官方管理的高质量Claude Code插件目录，由Anthropic团队直接维护，今日新增682star，是目前最活跃的官方仓库之一。包含大量经过验证的Claude Code插件。</p>
+<p class="taolu">💬 Claude的官方背书插件目录，质量有保证。</p>
+<div class="source">📡 GitHub | <a href="https://github.com/anthropics/claude-plugins-official" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>colbymchenry/codegraph — 14,805 stars — 代码知识图谱</h4>
+<p class="summary">CodeGraph是一个面向Claude Code、Codex、Cursor和OpenCode的预索引代码知识图谱系统，可以显著减少token使用量和工具调用次数，号称100%本地运行，今日新增4294star，热度很高。</p>
+<p class="taolu">💬 减少token消耗和提高效率是刚需，这个工具解决的是实际问题。</p>
+<div class="source">📡 GitHub | <a href="https://github.com/colbymchenry/codegraph" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>ChromeDevTools/chrome-devtools-mcp — 40,654 stars — Chrome DevTools for AI coding</h4>
+<p class="summary">ChromeDevTools MCP是Chrome官方发布的Chrome DevTools模型上下文协议服务器，可以让AI coding agent直接使用Chrome DevTools能力进行浏览器自动化，项目获得 Chrome 团队官方支持。</p>
+<p class="taolu">💬 Chrome官方亲自下场支持MCP协议，这意义重大。</p>
+<div class="source">📡 GitHub | <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>dotnet/skills — 2,327 stars — .NET AI辅助编程技能</h4>
+<p class="summary">这是微软官方维护的 .NET 和 C# 编程辅助技能仓库，旨在帮助AI coding agent更好地处理 .NET 相关编程任务，今日新增129star。</p>
+<p class="taolu">💬 微软也下场做AI coding skills了，.NET程序员有福了。</p>
+<div class="source">📡 GitHub | <a href="https://github.com/dotnet/skills" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>rohitg00/ai-engineering-from-scratch — 11,080 stars — 从零学AI工程</h4>
+<p class="summary">这个仓库名为"从零学AI工程"，声称可以帮助开发者从零开始学习AI工程化技能，涵盖提示工程、模型部署、性能优化等多个维度，今日新增热度很高。</p>
+<p class="taolu">💬 又一个AI学习资源，star涨势说明需求旺盛。</p>
+<div class="source">📡 GitHub | <a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank">查看原文</a></div>
+</div>
+</div>
+
+<!-- HackerNews -->
+<div class="section" id="sec-hn">
+<h2>📰 HackerNews</h2>
+
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>Was my $48K GPU server worth it? — 418 points</h4>
+<p class="summary">一位开发者花费48000美元配置了一台GPU服务器，并在HackerNews上分享了使用体验和投资回报分析。帖子引发了关于本地GPU训练vs云端GPU成本的大讨论，获得了418点高分和302条评论。</p>
+<p class="taolu">💬 48K美元的服务器，这是认真的吗？普通人还是乖乖用云吧。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>Project Hail Mary – Stellar Navigation Chart — 829 points</h4>
+<p class="summary">一位开发者分享了基于科幻小说《Project Hail Mary》制作的恒星导航图，将小说中的虚构星际任务以可视化的方式呈现，获得了高达829分，是今天的最高分文章。</p>
+<p class="taolu">💬 829分！科幻小说+数据可视化的结合，质量不言而喻。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>Uv is fantastic, but its package management UX is a mess — 183 points</h4>
+<p class="summary">一位开发者吐槽Uv包管理器功能强大但用户体验混乱，特别是包管理方面的交互设计让人困惑。这一观点引发了关于Python包管理工具易用性的大讨论，获得了183点。</p>
+<p class="taolu">💬 Uv很快，但易用性确实还有提升空间，工具和体验要两手抓。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>CODA: Rewriting Transformer Blocks as GEMM-Epilogue Programs — 47 points</h4>
+<p class="summary">一篇关于将Transformer块重写为GEMM-Epilogue程序的论文，探讨了深度学习推理优化的新思路，是今天HN上技术含量最高的学术类文章之一。</p>
+<p class="taolu">💬 将Transformer和GEMM联系起来，这个研究方向很有前景。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>Cleve Moler has died — 67 points</h4>
+<p class="summary">Cleve Moler，MATLAB的创始人和数学家，去世消息登上HN。Cleve Moler是数值计算领域的传奇人物，MATLAB和Octave都与他密切相关，他的贡献影响了无数工程师和科学家。</p>
+<p class="taolu">💬 默哀，Cleve Moler改变了无数理工科学生的学习方式。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>Blog ran on Ubuntu 16.04 for 10 years. I migrated it to FreeBSD — 260 points</h4>
+<p class="summary">一位博主分享了他将运行了10年的Ubuntu 16.04博客迁移到FreeBSD的经历，详细记录了迁移过程中的技术细节和踩坑经历，获得了260点高分和139条评论。</p>
+<p class="taolu">💬 10年的Ubuntu 16.04，这是什么执念？但迁移到FreeBSD确实需要勇气。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>The memory shortage is causing a repricing of consumer electronics — 154 points</h4>
+<p class="summary">存储芯片短缺正在导致消费电子产品的价格重置，从智能手机到笔记本电脑，多种产品的价格都将面临上涨压力。这篇文章深入分析了背后的供应链原因。</p>
+<p class="taolu">💬 内存涨价这件事，最终还是要消费者买单。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>Slumber: a TUI HTTP Client — 47 points</h4>
+<p class="summary>Slumber是一个命令行界面的HTTP客户端工具，提供交互式的TUI界面来发送和调试HTTP请求，获得了47分和17条评论。</p>
+<p class="taolu">💬 TUI风格的HTTP工具，比curl好看多了。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>The surprising story behind the first British person in space — 38 points</h4>
+<p class="summary">BBC发布了一篇关于英国首位进入太空的人物的幕后故事，揭示了一些鲜为人知的历史细节，获得了38分。</p>
+<p class="taolu">💬 英国人进太空？这故事听起来确实很意外。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>Using Kagi Search with Low Vision — 187 points</h4>
+<p class="summary>一位视力障碍用户分享了他使用Kagi搜索引擎配合低视力辅助工具的经验，为需要无障碍搜索的用户提供了宝贵的使用指南，获得187点。</p>
+<p class="taolu">💬 无障碍搜索这个话题值得关注，技术应该服务于每一个人。</p>
+<div class="source">📡 HackerNews | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div>
+</div>
+</div>
+
+<!-- V2EX -->
+<div class="section" id="sec-v2ex">
+<h2>💬 V2EX</h2>
+
+<div class="news-card">
+<span class="rank">🥇</span>
+<h4>Cursor 的 Debug 模式误删我 E 盘 921GB 文件</h4>
+<p class="summary">一位开发者在V2EX发帖控诉Cursor的Debug模式，称该功能在调试过程中误删了他E盘上921GB的文件，引发社区对AI编程工具安全性的担忧和讨论。帖子迅速登上今日热议第一梯队。</p>
+<p class="taolu">💬 921GB！Cursor这个Bug的代价也太高了，重要文件一定要勤备份啊。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥈</span>
+<h4>如何消除 vibe code 产生的技术债？</h4>
+<p class="summary">V2EX上一个关于vibe coding技术债的讨论帖引发了热议，开发者们分享了各自在AI辅助编程过程中积累技术债的经历以及消除经验。这个话题触动了许多在AI时代仍坚持工程标准的开发者。</p>
+<p class="taolu">💬 vibe code虽爽，但技术债总是要还的，这帖子说出了很多人的心声。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<span class="rank">🥉</span>
+<h4>大家都用的什么代理软件</h4>
+<p class="summary">这是一个V2EX上关于代理软件推荐的技术讨论帖，获得了129条回复，是tech tab最热门的帖子之一。社区分享了各种代理解决方案，包括 clash、mihomo 等主流工具的使用经验。</p>
+<p class="taolu">💬 129条回复，V2EX的程序员们对代理软件的需求真的很旺盛。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>iOS 版本 eSIM 扫码工具推荐</h4>
+<p class="summary>V2EX创作者分享了一款iOS版eSIM扫码工具，可以快捷解析eSIM截图、管理和导出eSIM二维码，支持多种运营商。这是一个很有实用价值的工具发布帖，获得了社区好评。</p>
+<p class="taolu">💬 eSIM越来越普及，这类工具的出现是必然的。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>明天就要软考了，我发现了数据库三范式之第一范式好像过时了</h4>
+<p class="summary">一位即将参加软件水平考试的开发者在V2EX发帖称他在备考过程中发现数据库第一范式的定义似乎与当今的数据库设计实践有些脱节，引发了关于范式理论是否过时的热烈讨论。</p>
+<p class="taolu">💬 考生突然质疑范式，这是学明白了还是学魔怔了？</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>[送码] Mipa - clash / mihomo 远程控制软件</h4>
+<p class="summary>V2EX开发者送码分享了一款名为Mipa的clash/mihomo远程控制软件，可以远程管理梯子配置。这是一个开发者福利帖，获得了社区关注。</p>
+<p class="taolu">💬 送码贴，永远有人需要这类工具。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>深圳电瓶车最近频繁被拍照罚款</h4>
+<p class="summary>V2EX一位深圳用户发帖称最近深圳对电瓶车的违规拍照执法力度明显加强，频繁收到罚单，引发了关于城市电动车管理和执法尺度的讨论。</p>
+<p class="taolu">💬 深圳的电动车管理越来越严了，各位骑手要注意。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>完全使用 AI Coding 上线一个工具站，帮看看是不是 bug 满天飞</h4>
+<p class="summary>一位开发者完全使用AI Coding方式上线了一个工具站，并在V2EX发帖邀请社区帮他检查bug。这个实验性质的帖子引发了对AI编程工具实际工程质量的讨论。</p>
+<p class="taolu">💬 AI编程到底能不能稳定输出，这个实验很有参考价值。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>向微信输入法投降🏳️，我再也不当嘉豪了</h4>
+<p class="summary>V2EX上一个关于输入法的讨论帖，用户宣布从其他输入法转向微信输入法自带的输入法，并分享了使用感受。这个看似简单的帖子获得了大量回复关于各种输入法的讨论。</p>
+<p class="taolu">💬 微信输入法确实越做越好了，但数据安全仍是顾虑。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
+
+<div class="news-card">
+<h4>ChatGPT Pro 20x 才是归宿</h4>
+<p class="summary>V2EX上一个关于ChatGPT Pro订阅的讨论帖，用户认为20倍速的Pro版本才是AI助手使用的"最终归宿"，引发了关于AI订阅定价和价值回报的讨论。</p>
+<p class="taolu">💬 20倍速？普通用户还是先用免费版吧。</p>
+<div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div>
+</div>
 </div>
 
 <footer>
   由 <a href="https://github.com/zhangJingTao/daily-news-by-hermes">Hermes AI</a> 每日自动生成 ·
   <a href="https://zhangJingTao.github.io/daily-news-by-hermes/">📋 新闻总览</a>
 </footer>
-
-<script>
-const sections = [
-  { id: 'sec-finance', start: 0, end: 20, label: '🏦 金融市场' },
-  { id: 'sec-football', start: 20, end: 35, label: '⚽ 足球' },
-  { id: 'sec-basketball', start: 35, end: 50, label: '🏀 篮球' },
-  { id: 'sec-tennis', start: 50, end: 58, label: '🎾 网球' },
-  { id: 'sec-f1', start: 58, end: 66, label: '🏎️ F1' },
-  { id: 'sec-cs2', start: 66, end: 75, label: '🎮 CS2' },
-];
-let playing = false;
-let currentSection = -1;
-const audio = document.getElementById('newsAudio');
-const progressFill = document.getElementById('progressFill');
-const timeDisplay = document.getElementById('timeDisplay');
-const playerMeta = document.getElementById('playerMeta');
-const floatingBtn = document.getElementById('floatingBtn');
-const floatingProgress = document.getElementById('floatingProgress');
-const floatRing = document.getElementById('floatRing');
-const floatTimeEl = document.getElementById('floatTime');
-const playIcon = document.getElementById('playIcon');
-const pauseIcon = document.getElementById('pauseIcon');
-const floatPlayIcon = document.getElementById('floatPlayIcon');
-const floatPauseIcon = document.getElementById('floatPauseIcon');
-
-function fmt(s) {
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60);
-  return m + ':' + String(sec).padStart(2, '0');
-}
-
-function toggleAudio() {
-  if (playing) {
-    audio.pause();
-    audio.currentTime = 0;
-    playing = false;
-    syncUI(false);
-  } else {
-    audio.play().catch(() => {});
-    playing = true;
-    syncUI(true);
-  }
-}
-
-function syncUI(p) {
-  playIcon.style.display = p ? 'none' : 'block';
-  pauseIcon.style.display = p ? 'block' : 'none';
-  floatPlayIcon.style.display = p ? 'none' : 'block';
-  floatPauseIcon.style.display = p ? 'block' : 'none';
-}
-
-audio.addEventListener('timeupdate', () => {
-  if (!audio.duration) return;
-  const t = audio.currentTime;
-  const pct = (t / audio.duration) * 100;
-  progressFill.style.width = pct + '%';
-  timeDisplay.textContent = fmt(t) + ' / ' + fmt(audio.duration);
-  const circumference = 53.4;
-  floatRing.style.strokeDashoffset = circumference - (pct / 100) * circumference;
-  floatTimeEl.textContent = fmt(t);
-  const idx = sections.findIndex(s => t >= s.start && t < s.end);
-  if (idx !== currentSection) {
-    document.querySelectorAll('.section.playing').forEach(el => el.classList.remove('playing'));
-    if (idx >= 0) {
-      const el = document.getElementById(sections[idx].id);
-      if (el) el.classList.add('playing');
-    }
-    currentSection = idx;
-    playerMeta.textContent = idx >= 0 ? '正在播报：' + sections[idx].label : '播报结束';
-  }
-});
-
-audio.addEventListener('ended', () => {
-  playing = false;
-  syncUI(false);
-  playerMeta.textContent = '播报结束';
-  document.querySelectorAll('.section.playing').forEach(el => el.classList.remove('playing'));
-  currentSection = -1;
-});
-
-function seekAudio(e) {
-  const bar = document.getElementById('progressBar');
-  const rect = bar.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  if (audio.duration) audio.currentTime = pct * audio.duration;
-}
-
-new IntersectionObserver(([entry]) => {
-  floatingBtn.classList.toggle('show', !entry.isIntersecting && playing);
-  floatingProgress.classList.toggle('show', !entry.isIntersecting && playing);
-}, { threshold: 0.1 }).observe(document.getElementById('audioPlayer'));
-</script>
 
 </body>
 </html>
