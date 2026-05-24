@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日新闻总结 · 2026-05-25</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0f1117;--card:#1a1d27;--border:#2a2d3e;--accent:#6c8fff;--text:#e8eaf0;--text2:#8b8fa3;--up:#3dd68c;--down:#ff6b6b}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:60px}
+.container{max-width:860px;margin:0 auto;padding:0 16px}
+.audio-player{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:16px 0;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.play-btn{width:18px;height:18px;background:var(--accent);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.play-btn svg{width:8px;height:8px}
+.player-info{flex:1;min-width:0}
+.player-title{font-size:13px;font-weight:600}
+.player-meta{font-size:11px;color:var(--text2);margin-top:2px}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;margin-top:6px;cursor:pointer}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width 0.1s}
+.time-display{font-size:10px;color:var(--text2);margin-top:2px}
+.floating-btn{display:none;position:fixed;bottom:20px;right:20px;width:44px;height:44px;background:var(--accent);border-radius:50%;cursor:pointer;align-items:center;justify-content:center;z-index:200;box-shadow:0 4px 12px rgba(108,143,255,0.4)}
+.floating-btn.show{display:flex}
+.floating-btn svg{width:20px;height:20px}
+.market-bar{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0;padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border)}
+.mkt-item{display:flex;align-items:center;gap:5px;font-size:11px;padding:4px 8px;border-radius:4px;background:rgba(255,255,255,0.03)}
+.mkt-name{color:var(--text2)}
+.mkt-price{font-weight:600}
+.mkt-item.up .mkt-price{color:var(--up)}
+.mkt-item.down .mkt-price{color:var(--down)}
+.mkt-chg{font-size:10px}
+.mkt-item.up .mkt-chg{color:var(--up)}
+.mkt-item.down .mkt-chg{color:var(--down)}
+h1{font-size:22px;font-weight:700;margin:20px 0 4px}
+.subtitle{font-size:12px;color:var(--text2);margin-bottom:8px}
+.section{margin:28px 0}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-icon{font-size:18px}
+.section-header h2{font-size:16px;font-weight:600}
+.news-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;position:relative}
+.news-card.playing{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.rank{position:absolute;top:10px;right:12px;font-size:16px}
+.news-card h4{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--text);line-height:1.4;padding-right:30px}
+.summary{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:8px}
+.吐槽{font-size:12px;color:#f0c040;font-style:italic;margin-bottom:8px}
+.source{font-size:11px;color:var(--text2)}
+.source a{color:var(--accent);text-decoration:none}
+footer{text-align:center;padding:30px 0 10px;font-size:12px;color:var(--text2)}
+footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>每日新闻总结 · 2026-05-25</h1>
+<div class="subtitle">由 Hermes AI 生成 · 2026-05-25 06:00</div>
+
+<div class="audio-player" id="audioPlayer">
+<button class="play-btn" id="playBtn" onclick="toggleAudio()">
+<svg id="playIcon" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+<svg id="pauseIcon" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+</button>
+<div class="player-info">
+<div class="player-title">🎧 语音版 · 2026-05-25</div>
+<div class="player-meta" id="playerMeta">点击播放</div>
+<div class="progress-bar" id="progressBar" onclick="seekAudio(event)"><div class="progress-fill" id="progressFill"></div></div>
+<div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+</div>
+</div>
+
+<audio id="newsAudio" src="../audio/2026-05-25.mp3"></audio>
+
+<div class="market-bar"><span class="mkt-item up"><span class="mkt-name">S&P 500</span><span class="mkt-price">7,473</span><span class="mkt-chg">+0.37%</span></span>
+<span class="mkt-item up"><span class="mkt-name">Nasdaq</span><span class="mkt-price">26,343</span><span class="mkt-chg">+0.19%</span></span>
+<span class="mkt-item up"><span class="mkt-name">DJIA</span><span class="mkt-price">50,579</span><span class="mkt-chg">+0.58%</span></span>
+<span class="mkt-item up"><span class="mkt-name">DAX</span><span class="mkt-price">24,888</span><span class="mkt-chg">+1.15%</span></span>
+<span class="mkt-item up"><span class="mkt-name">CAC 40</span><span class="mkt-price">8,115</span><span class="mkt-chg">+0.37%</span></span>
+<span class="mkt-item down"><span class="mkt-name">FTSE 100</span><span class="mkt-price">10,466</span><span class="mkt-chg">-0.00%</span></span>
+<span class="mkt-item up"><span class="mkt-name">Gold</span><span class="mkt-price">$4,583</span><span class="mkt-chg">+0.59%</span></span>
+<span class="mkt-item down"><span class="mkt-name">WTI Oil</span><span class="mkt-price">$92.39</span><span class="mkt-chg">-4.36%</span></span>
+<span class="mkt-item down"><span class="mkt-name">NVDA</span><span class="mkt-price">$215</span><span class="mkt-chg">-1.90%</span></span>
+<span class="mkt-item up"><span class="mkt-name">Apple</span><span class="mkt-price">$308</span><span class="mkt-chg">+1.26%</span></span>
+<span class="mkt-item down"><span class="mkt-name">Amazon</span><span class="mkt-price">$266</span><span class="mkt-chg">-0.80%</span></span>
+<span class="mkt-item down"><span class="mkt-name">KWEB</span><span class="mkt-price">$26.91</span><span class="mkt-chg">-2.61%</span></span></div>
+
+<section class="section" id="sec-finance">
+  <div class="section-header"><span class="section-icon">🏦</span><h2>金融市场</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>WTI原油崩跌4.36%！霍尔木兹消息冲击能源市场</h4><p class="summary">WTI原油周一跳空低开，跌幅4.9%，现报92.39美元/桶。伊朗官员表示霍尔木兹海峡管理不会恢复战前状态，市场对供应中断担忧骤增。黄金受避险情绪推动涨至4583美元/盎司。</p><p class="吐槽">💬 油价一天跌4%，这幅度怕是连特朗普都想不到，抄底的怕是要先挨一刀。</p><div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>美股三大指数集体收涨，纳指涨0.19%</h4><p class="summary">S&P 500收7473点涨0.37%，Nasdaq涨0.19%报26343点，DJIA强势上扬294点。苹果逆势涨1.26%领跑科技股，NVDA跌1.9%继续消化估值压力。中概KWEB跌2.61%表现最弱。</p><p class="吐槽">💬 指数涨了账户没涨，这行情专治各种不服。</p><div class="source">📡 Yahoo Finance | <a href="https://finance.yahoo.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>德国DAX涨1.15%！欧洲央行降息预期升温</h4><p class="summary">德国DAX指数大涨281点报24888，欧元区通胀回落推动欧洲央行降息预期。CAC 40涨0.37%报8115，FTSE 100基本持平。欧洲斯托克50指数上涨0.89%。</p><p class="吐槽">💬 欧洲开始放水，美股：你涨我也涨。</p><div class="source">📡 Yahoo Finance | <a href="https://finance.yahoo.com/" target="_blank">查看原文</a></div></div>
+  </div>
+</section><section class="section" id="sec-football">
+  <div class="section-header"><span class="section-icon">⚽</span><h2>足球</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>阿森纳夺冠！枪手时隔20年重夺英超冠军</h4><p class="summary">阿森纳正式锁定英超冠军，时隔20年再捧联赛奖杯。球队在本赛季展现出强大的防守韧性，萨卡和厄德高成为关键人物。</p><p class="吐槽">💬 等了20年，阿森纳球迷的头发都少了，但这次冠军是真的。</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>瓜迪奥拉时代落幕！曼城1-2遭维拉双杀</h4><p class="summary">曼城1-2负于维拉，瓜迪奥拉和B席、斯通斯等人完成告别战。8年4冠的曼城王朝就此终结，英超正式改朝换代。</p><p class="吐槽">💬 瓜帅走了，曼城的说明书也跟着一起收起来了。</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>西汉姆降级！时隔15年再度降至英冠</h4><p class="summary">西汉姆积39分落后热刺2分，惨遭降级。铁锤帮上一次踢英冠还是2003年。赖斯离队后球队攻防两端全面崩盘，英超老牌球队就此陨落。</p><p class="吐槽">💬 西汉姆降级了，切尔西第10，切尔西球迷：这剧本不对啊。</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>罗马科莫获欧冠资格！意甲大结局：米兰尤文踢欧联</h4><p class="summary">意甲最终轮罗马2-0完胜，锁定欧冠席位。科莫作为升班马意外获得欧冠资格，创队史纪录。劳塔罗以26球夺金靴，国际米兰无缘下赛季欧冠。</p><p class="吐槽">💬 米兰尤文踢欧联，罗马踢欧冠——意甲编剧都不敢这么写。</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>B费21助攻破纪录！曼联第3收官3-0双杀布莱顿</h4><p class="summary">曼联3-0击败布莱顿，以联赛第3收官。B费传射+21助攻独占英超助攻王，刷新单赛季纪录。滕哈格的执教成绩获得肯定，下赛季欧冠曼联将卷土重来。</p><p class="吐槽">💬 B费21助攻，曼联第3——腾嗨不嗨不知道，反正球迷是嗨了。</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+  </div>
+</section><section class="section" id="sec-basketball">
+  <div class="section-header"><span class="section-icon">🏀</span><h2>篮球</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>尼克斯3-0领先！步行者东决濒临出局</h4><p class="summary">尼克斯大比分3-0领先步行者，距离总决赛仅差一胜。布伦森系列赛场均砍下32分，表现完胜哈利伯顿。步行者0-3落后翻盘概率不足1%，哈利伯顿股四头肌伤势成X因素。</p><p class="吐槽">💬 布伦森：我不是球星？我TM是超巨！</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>雷霆2-1马刺！SGA比肩詹姆斯还差什么？</h4><p class="summary">雷霆西部决赛G4险胜马刺，大比分2-1领先。SGA全场砍下38分，关键时刻展现杀手本能。相比詹姆斯同期，SGA的带队能力已不逊色，独缺一枚总冠军戒指。</p><p class="吐槽">💬 SGA离詹姆斯就差一个靠谱的内线——马刺：你说谁不靠谱？</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>米切尔比目鱼肌拉伤！骑士G5前景蒙阴影</h4><p class="summary">米切尔在东部决赛G4中拉伤比目鱼肌，初步评估恢复期1-2周。若恢复不及骑士将连续第三年无缘总决赛，骑士管理层今夏面临阵容重组抉择。</p><p class="吐槽">💬 骑士这支队伍，每年建队思路都是对的，每年结局都是错的。</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>里夫斯要价5年2亿！湖人薪资压力骤增</h4><p class="summary">湖人后卫里夫斯经纪人透露理想价位5年2亿美元。若年薪达3500万，篮网和公牛有足够薪资空间进行截胡，湖人休赛期续约工作面临严峻考验。</p><p class="吐槽">💬 3500万一年？里夫斯：这价格合理吧？我在湖人证明过自己的。</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>詹姆斯3500万-4500万！湖人预计执行球员选项</h4><p class="summary">消息人士透露詹姆斯预计执行下赛季5260万美元的球员选项，并在休赛期与湖人谈判续约。薪资预期在3500万-4500万之间，詹姆斯愿意在生涯末期做出薪资牺牲。</p><p class="吐槽">💬 老詹：钱少点没关系，但得给我配个全明星队友。</p><div class="source">📡 直播吧 | <a href="https://www.zhibo8.com/" target="_blank">查看原文</a></div></div>
+  </div>
+</section><section class="section" id="sec-tennis">
+  <div class="section-header"><span class="section-icon">🎾</span><h2>网球</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>王欣瑜2-1逆转！法网首轮惊险过关</h4><p class="summary">王欣瑜在法网女单首轮比赛中先丢一盘后连赢两盘，2-1逆转击败塔格尔，闯过首轮关。决胜盘2-5落后连赢5局，完成惊天大逆转，即时排名升至第29位。</p><p class="吐槽">💬 0-2落后连赢5局，这剧本只有王欣瑜敢写。</p><div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>郑钦文法网首轮17点出战！中国军团全面出击</h4><p class="summary">法网第二日赛程公布，郑钦文作为17号种子将在中央球场17点出战首轮比赛。吴易昺、郭涵煜稍后亮相男单赛场，中国球员全面出击法网。</p><p class="吐槽">💬 郑钦文17点场，这个时间点中国球迷得备好咖啡了。</p><div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>2021年法网冠军一轮游！克雷吉茨科娃浪费2赛点遭逆转</h4><p class="summary">前法网女单冠军克雷吉茨科娃在首轮浪费两个赛点后，以1-2遭对手逆转淘汰，惨遭一轮游。捷克好手近两年状态持续低迷，世界排名继续下滑。</p><p class="吐槽">💬 法网冠军如今连首轮都过不了——克雷吉茨科娃：我是谁我在哪？</p><div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>兹维列夫3-0完胜！法网男单首轮轻松晋级</h4><p class="summary">2号种子兹维列夫直落三盘击败本土球员邦齐，连续十年在法网首轮过关。德国名将状态出色，决赛圈表现值得期待。</p><p class="吐槽">💬 十年首轮全过——稳定性这事儿，兹维列夫就没输过谁。</p><div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>王曦雨2-0晋级！中国女网三人同时闯关</h4><p class="summary">王曦雨2-0击败科维尼奇，职业生涯第二次在法网正赛获胜。加上王欣瑜和郑钦文，中国女网三人同时晋级法网次轮，创造近年来最佳表现。</p><p class="吐槽">💬 三人同时晋级——中国女网这是集体给全国球迷发红包啊。</p><div class="source">📡 直播吧 | <a href="https://news.zhibo8.com/other/" target="_blank">查看原文</a></div></div>
+  </div>
+</section><section class="section" id="sec-worldcup">
+  <div class="section-header"><span class="section-icon">🏆</span><h2>美加墨世界杯 2026</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>美加墨世界杯门票销售超预期！开幕式门票炒至天价</h4><p class="summary">2026年世界杯门票销售火爆，部分场次门票价格已被炒至原价的3倍以上。开幕式和决赛门票在黑市价格已突破5000美元，普通球迷难以承受。</p><p class="吐槽">💬 世界杯门票比演唱会还贵，这票价里约球迷看了会沉默，北京球迷看了会流泪。</p><div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>2026世界杯球队分档曝光！美国成第二档球队</h4><p class="summary">2026年世界杯分档规则基本确定，美国作为东道主成为第二档球队。第一档包括巴西、法国、德国等传统强队，第三档包括多支非洲和亚洲球队。</p><p class="吐槽">💬 美国作为东道主才第二档——FIFA你认真的？</p><div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>加拿大世界杯场馆建设滞后！民众担忧无法按时完工</h4><p class="summary">距离2026年世界杯开幕仅剩一年，加拿大多个场馆建设进度滞后。部分民众对能否如期完工表示担忧，赛事组织能力受到质疑。</p><p class="吐槽">💬 一年后开幕，场馆还没建好——加拿大人：放心，我们有自然风光可以看。</p><div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>亚洲名额缩减至8席！澳大利亚日本韩国竞争激烈</h4><p class="summary">2026年世界杯亚洲区名额缩减至8席，较上届减少1席。日本、韩国、澳大利亚、伊朗、沙特六强将争夺这8个席位，中国男足仍需努力。</p><p class="吐槽">💬 亚洲8席，国足排名亚洲第12——这个差距比股票账户还让人心凉。</p><div class="source">📡 金十数据 | <a href="https://www.jin10.com/" target="_blank">查看原文</a></div></div>
+  </div>
+</section><section class="section" id="sec-cs2">
+  <div class="section-header"><span class="section-icon">🎮</span><h2>CS2</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>Legacy 3-2逆转登顶！CAC 2026总决赛黑马夺冠</h4><p class="summary">CAC 2026总决赛爆出大冷门，Legacy在0-2落后的情况下连扳三局，3-2逆转MIBR夺得总冠军。latto凭借决赛的统治级表现荣膺赛事MVP，Falcons止步四强。</p><p class="吐槽">💬 0-2到3-2，这剧本要是给电影公司拍估计都不敢批——Legacy：我们的字典里没有放弃。</p><div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>MOUZ 2-1淘汰Falcons！CAC 2026三四名决赛</h4><p class="summary">MOUZ在CAC 2026三四名决赛中2-1击败Falcons，获得赛事第三名。torzsi赛后表示：新阵容近两周拿下了十场胜利，我们为此感到自豪。Falcons阵容问题再次暴露。</p><p class="吐槽">💬 Falcons花了那么多钱买人，结果连前三都进不去——投资人的心在滴血。</p><div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>TYLOO 2-0横扫EDG！国内战队内战TYL完胜晋级八强</h4><p class="summary">TYLOO在进化者杯八强选拔赛中2-0零封EDG，以出色状态晋级八强。TYL近期表现出色，整体配合默契，LBY离线状态火热。中国CS2战队竞争格局正在改变。</p><p class="吐槽">💬 EDG被2-0横扫——EDG这名字和成绩一样，都是EDG（edge）的。</p><div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>pasha因问候路人队友遭FACEIT封禁一周！</h4><p class="summary">CS2知名选手pasha在游戏中对路人队友使用不当言语，遭FACEIT平台封禁一周。pasha事后公开道歉，承认自己的行为不妥，并表示将接受处罚。</p><p class="吐槽">💬 职业哥封禁一周——普通玩家要是问候队友，封号都是永久的。</p><div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>jL租期结束！MOUZ发推暗示暂别</h4><p class="summary">MOUZ官方发推暗示jL将暂时离队。jL租借至MOUZ期间表现出色，帮助队伍在多项赛事中取得好成绩。他的下一站尚未确定，多支战队表示兴趣。</p><p class="吐槽">💬 租期到了——MOUZ：谢谢你，但下次再来可能得等通知了。</p><div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>Torzsi：我为团队感到骄傲！MOUZ近期十连胜</h4><p class="summary">MOUZ选手torzsi在采访中表示：新阵容近两周拿下了十场胜利，我们为此感到自豪。队伍化学反应良好，战术执行力强，年轻选手成长迅速。</p><p class="吐槽">💬 十连胜——MOUZ这状态要是能保持到Major，冠军稳了。</p><div class="source">📡 5eplay | <a href="https://www.5eplay.com/article" target="_blank">查看原文</a></div></div>
+  </div>
+</section><section class="section" id="sec-github">
+  <div class="section-header"><span class="section-icon">📦</span><h2>GitHub Trending</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>Understand-Anything — 把代码变成交互式知识图谱</h4><p class="summary">Graphs that teach > graphs that impress. 将任意代码转换为可交互的知识图谱，支持Claude Code、Codex、Cursor等主流AI编码工具，帮助开发者更好地理解和探索代码库。今日斩获2500+星。</p><p class="吐槽">💬 代码可视化终于不是饼了——这图谱一出来，产品经理看了都得鼓掌。</p><div class="source">📡 GitHub | <a href="https://github.com/Lum1104/Understand-Anything" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>ai-engineering-from-scratch — 从零学AI工程</h4><p class="summary">Learn it. Build it. Ship it for others. 一个系统性的AI工程学习路径，从基础知识到项目部署，适合想入门AI开发的工程师。今日斩获1800+星。</p><p class="吐槽">💬 又一个宣称从零开始的教程——但这个stars长得确实很快，先收藏再说。</p><div class="source">📡 GitHub | <a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>claude-plugins-official — Anthropic官方Claude插件目录</h4><p class="summary">Anthropic官方维护的高质量Claude Code插件目录，收录了大量经过验证的优质插件。3位数增长，帮助开发者快速找到靠谱插件。</p><p class="吐槽">💬 官方背书的插件目录——终于不用在论坛里一个个试毒了。</p><div class="source">📡 GitHub | <a href="https://github.com/anthropics/claude-plugins-official" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>karpathy-skills — 用单文件CLAUDE.md提升编码表现</h4><p class="summary">来自Andrej Karpathy的观察总结，通过一个CLAUDE.md文件改善Claude Code的行为表现。已被4.6万开发者fork，证明了Karpathy的号召力。</p><p class="吐槽">💬 Karpathy出品，必属精品——哪怕只是一个md文件，也值15万星。</p><div class="source">📡 GitHub | <a href="https://github.com/multica-ai/andrej-karpathy-skills" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>codegraph — 本地代码知识图谱，token用得更少</h4><p class="summary">为Claude Code、Codex、Cursor等AI编程工具预索引代码知识图谱，消耗更少token，工具调用更少，100%本地运行。</p><p class="吐槽">💬 做AI编程工具的公司都知道：得token者得天下，这个方向对了。</p><div class="source">📡 GitHub | <a href="https://github.com/colbymchenry/codegraph" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>pi — AI agent工具包：CLI+统一API+TUI+Slack Bot</h4><p class="summary">AI agent工具包，包含编码agent CLI、统一LLM API、TUI和Web UI库、Slack机器人、vLLM pods。开源自居，Stars增长迅猛。</p><p class="吐槽">💬 一个工具覆盖AI agent全链路——如果能用起来，工程团队可以省一半人力。</p><div class="source">📡 GitHub | <a href="https://github.com/earendil-works/pi" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>free-claude-code — 在终端免费用Claude Code</h4><p class="summary">通过终端、VSCode扩展或Discord等方式免费使用Claude Code，支持语音，看起来很有前景。</p><p class="吐槽">💬 免费用Claude Code——如果这个不被封，那Cluade要哭了。</p><div class="source">📡 GitHub | <a href="https://github.com/Alishahryar1/free-claude-code" target="_blank">查看原文</a></div></div>
+  </div>
+</section><section class="section" id="sec-hn">
+  <div class="section-header"><span class="section-icon">💬</span><h2>HackerNews</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>DeepSeek reasonix — 低成本高缓存的原生编码Agent</h4><p class="summary">DeepSeek推出的原生编码agent，主打高缓存和低成本。HN讨论区反响热烈，被认为是在AI编码工具红海中的差异化竞争。有用户实测后表示性价比极高。</p><p class="吐槽">💬 DeepSeek还在闷声发力——这一次不是模型价格战，是工具链战争。</p><div class="source">📡 Hacker News | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>Memory已占AI芯片成本近三分之二</h4><p class="summary">一项研究显示，内存已占AI芯片组件成本的近三分之二。HBM带宽成为大模型训练的瓶颈，算力提升的速度已经追不上内存增长的需求。</p><p class="吐槽">💬 做芯片的都在卷算力，没想到真正的瓶颈是内存——这告诉我们，不动脑子就会被卡脖子。</p><div class="source">📡 Hacker News | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>Constraint Decay — LLM Agent在后端代码生成中的脆弱性</h4><p class="summary">学术论文揭示LLM Agent在生成后端代码时存在约束衰减问题：随时间推移，Agent会逐渐偏离初始约束，导致代码质量下降。这是LLM落地工程化的重要警示。</p><p class="吐槽">💬 论文题目很长，总结一句话：AI写代码时间长了会变懒——这不就是我本人吗。</p><div class="source">📡 Hacker News | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>Jujutsu — 打败Git繁琐疲劳的版本控制工具</h4><p class="summary">一款新的版本控制工具，旨在解决传统Git的繁琐问题。有用户分享使用Jujutsu的心得，认为它在日常开发中比Git更高效，特别适合处理复杂的分支场景。</p><p class="吐槽">💬 Git已经够复杂了，再学一个新工具——但为了少加班，学吧。</p><div class="source">📡 Hacker News | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>澳大利亚四天工作周研究：生产力显著提升</h4><p class="summary">澳大利亚一项关于四天工作周的研究显示，参与者在缩短工作时间后生产力反而提升。四天工作制不仅提高员工满意度，还减少了请假天数。</p><p class="吐槽">💬 每周四天，每天工作十小时——老板：你看我多有诚意。</p><div class="source">📡 Hacker News | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>50小时画一条线 — 数据可视化也可以很艺术</h4><p class="summary">一位设计师花了50小时创作一条线的数据图表，引发HN社区关于数据艺术与实用性的讨论。许多人表示这种极致追求让人印象深刻，但也有人质疑投入产出比。</p><p class="吐槽">💬 50小时画一条线——这可能是行为艺术，也可能是强迫症，但确实很美。</p><div class="source">📡 Hacker News | <a href="https://news.ycombinator.com/" target="_blank">查看原文</a></div></div>
+  </div>
+</section><section class="section" id="sec-v2ex">
+  <div class="section-header"><span class="section-icon">🔗</span><h2>V2EX</h2></div>
+  <div class="news-list">
+    <div class="news-card"><span class="rank">🥇</span><h4>技术不值钱，想法和流量才值钱</h4><p class="summary">V2EX热帖引发激烈讨论，发帖者认为技术本身越来越不值钱，真正有价值的是能够触达用户的想法和获取流量的能力。评论区讨论了技术人的出路和转型方向。</p><p class="吐槽">💬 技术不值钱这话谁都会说，但没有技术的人永远只能等别人实现想法。</p><div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥈</span><h4>我开发了这么多游戏，也没啥热度，不知道我做错了什么</h4><p class="summary">独立游戏开发者发帖感叹自己做了很多游戏但没有热度。评论区给出了各种建议：选题、宣发、平台选择、玩家心理等，帖子引发了独立开发者群体的共鸣。</p><p class="吐槽">💬 做了很多游戏没热度——大概率不是技术问题，是选题问题。</p><div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><span class="rank">🥉</span><h4>再穷不能穷AI，再省不能省token — Hermes接管了我的全部设备</h4><p class="summary">用户分享了自己如何用Hermes AI同时管理Mac、NAS和香港服务器的经验，展示了一个用AI工具链提升效率的完整工作流。帖子获得大量关注。</p><p class="吐槽">💬 全设备AI接管——这位用户已经不是效率提升了，是把AI变成了生活助理。</p><div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>你们都在用什么机器跑Hermes？</h4><p class="summary">V2EX网友交流跑Hermes的硬件配置，从Mac Mini到服务器到NAS，讨论了不同设备的性价比和场景选择。评论区分享了各自的使用经验和优化心得。</p><p class="吐槽">💬 Mac Mini跑AI——苹果估计也没想到，自家设备最大用户场景是跑LLM。</p><div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>5块钱一年！写了个极品纯数字域名发现工具，已开源</h4><p class="summary">开发者分享了一款纯数字域名发现工具，成本仅5块钱一年，已完全开源。支持批量查询、自动发现可注册的优质域名，适用于域名投资和站群运营。</p><p class="吐槽">💬 5块钱一年的工具——这作者不是在做产品，是在做慈善。</p><div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div></div>
+    <div class="news-card"><h4>OpenAgent：单文件版龙虾，仅一个文件双击就能跑</h4><p class="summary">一款单文件高性能Agent，声称是Open Interpreter的竞品。无需安装，双击即可运行，支持多种LLM后端。有用户测试后表示性能出乎意料地好。</p><p class="吐槽">💬 单文件Agent——这才是真正的开箱即用，那些依赖地狱都弱爆了。</p><div class="source">📡 V2EX | <a href="https://www.v2ex.com/" target="_blank">查看原文</a></div></div>
+  </div>
+</section>
+
+<footer>
+由 <a href="https://github.com/zhangJingTao/daily-news-by-hermes">Hermes AI</a> 每日自动生成 ·
+<a href="https://zhangJingTao.github.io/daily-news-by-hermes/">📋 新闻总览</a>
+</footer>
+</div>
+
+<div class="floating-btn" id="floatingBtn" onclick="toggleAudio()">
+<svg id="floatPlayIcon" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+<svg id="floatPauseIcon" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+</div>
+
+<script>
+let playing=false;
+const sections=[{id:'sec-finance',start:0,end:20,label:'🏦 金融市场'},{id:'sec-football',start:20,end:35,label:'⚽ 足球'},{id:'sec-basketball',start:35,end:50,label:'🏀 篮球'},{id:'sec-tennis',start:50,end:58,label:'🎾 网球'},{id:'sec-worldcup',start:58,end:66,label:'🏆 美加墨世界杯'},{id:'sec-cs2',start:66,end:75,label:'🎮 CS2'},{id:'sec-github',start:75,end:83,label:'📦 GitHub Trending'},{id:'sec-hn',start:83,end:88,label:'💬 HackerNews'},{id:'sec-v2ex',start:88,end:95,label:'🔗 V2EX'}];
+let currentSection=-1;
+const audio=document.getElementById('newsAudio');
+const progressFill=document.getElementById('progressFill');
+const timeDisplay=document.getElementById('timeDisplay');
+const playerMeta=document.getElementById('playerMeta');
+const floatingBtn=document.getElementById('floatingBtn');
+const playIcon=document.getElementById('playIcon');
+const pauseIcon=document.getElementById('pauseIcon');
+const floatPlayIcon=document.getElementById('floatPlayIcon');
+const floatPauseIcon=document.getElementById('floatPauseIcon');
+function fmt(s){const m=Math.floor(s/60);const sec=Math.floor(s%60);return m+':'+String(sec).padStart(2,'0');}
+function toggleAudio(){if(playing){audio.pause();audio.currentTime=0;playing=false;syncUI(false);}else{audio.play().catch(()=>{});playing=true;syncUI(true);}}
+function syncUI(p){playIcon.style.display=p?'none':'block';pauseIcon.style.display=p?'block':'none';floatPlayIcon.style.display=p?'none':'block';floatPauseIcon.style.display=p?'block':'none';}
+audio.addEventListener('timeupdate',()=>{if(!audio.duration)return;const t=audio.currentTime;const pct=(t/audio.duration)*100;progressFill.style.width=pct+'%';timeDisplay.textContent=fmt(t)+' / '+fmt(audio.duration);const idx=sections.findIndex(s=>t>=s.start&&t<s.end);if(idx!==currentSection){document.querySelectorAll('.section.playing').forEach(el=>el.classList.remove('playing'));if(idx>=0){const el=document.getElementById(sections[idx].id);if(el)el.classList.add('playing');}currentSection=idx;playerMeta.textContent=idx>=0?'正在播报：'+sections[idx].label:'播报结束';}});
+audio.addEventListener('ended',()=>{playing=false;syncUI(false);playerMeta.textContent='播报结束';document.querySelectorAll('.section.playing').forEach(el=>el.classList.remove('playing'));currentSection=-1;});
+function seekAudio(e){const bar=document.getElementById('progressBar');const rect=bar.getBoundingClientRect();const pct=(e.clientX-rect.left)/rect.width;if(audio.duration)audio.currentTime=pct*audio.duration;}
+new IntersectionObserver(([entry])=>{floatingBtn.classList.toggle('show',!entry.isIntersecting&&playing);},{threshold:0.1}).observe(document.getElementById('audioPlayer'));
+</script>
+</body>
+</html>
