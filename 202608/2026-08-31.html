@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日新闻 · 2026-08-31 周一</title>
+<style>
+:root {
+  --bg-base: #0b0c10;
+  --bg-surface: #13151c;
+  --bg-elevated: #1c1f2a;
+  --bg-hover: #252836;
+  --border-subtle: #252836;
+  --border-default: #323549;
+  --text-primary: #e8eaf0;
+  --text-secondary: #9094a8;
+  --text-muted: #565c74;
+  --primary: #818cf8;
+  --secondary: #f59e0b;
+  --accent: #2dd4bf;
+  --positive: #34d399;
+  --negative: #f43f5e;
+  --color-football: #38bdf8;
+  --color-basketball: #a78bfa;
+  --color-tennis: #fb923c;
+  --color-cs2: #f472b6;
+  --color-github: #818cf8;
+  --color-hn: #2dd4bf;
+  --color-v2ex: #f59e0b;
+  --color-jin10: #fbbf24;
+  --font-sans: Inter, "Noto Sans SC", system-ui, sans-serif;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --transition-fast: 150ms ease;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 12, 16, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.site-logo { display: flex; align-items: center; gap: 10px; }
+.site-logo-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+.site-logo-text { font-size: 16px; font-weight: 600; }
+.site-date { color: var(--text-secondary); font-size: 14px; }
+.container { max-width: 760px; margin: 0 auto; padding: 0 16px 60px; }
+h1 { font-size: 22px; margin: 20px 0 8px; font-weight: 700; }
+.subtitle { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
+.market-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 12px 0;
+  scrollbar-width: none;
+}
+.market-bar::-webkit-scrollbar { display: none; }
+.market-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  min-width: 84px;
+  flex-shrink: 0;
+}
+.market-item-name { font-size: 11px; color: var(--text-secondary); }
+.market-item-price { font-size: 13px; font-weight: 600; }
+.market-item-change { font-size: 11px; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 2px; }
+.market-item-change.pos { background: rgba(52, 211, 153, 0.12); color: var(--positive); }
+.market-item-change.neg { background: rgba(244, 63, 94, 0.12); color: var(--negative); }
+.market-note { color: var(--text-muted); font-size: 11px; padding: 4px 0 16px; }
+.section {
+  margin-bottom: 32px;
+  animation: fadeUp 0.4s ease both;
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; } }
+.section:nth-child(1) { animation-delay: 0.05s; }
+.section:nth-child(2) { animation-delay: 0.10s; }
+.section:nth-child(3) { animation-delay: 0.15s; }
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.section-icon-wrap {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.section-title { font-size: 18px; font-weight: 700; }
+.section-subtitle { color: var(--text-secondary); font-size: 12px; margin-left: auto; }
+.news-list { display: flex; flex-direction: column; gap: 10px; }
+.news-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+}
+.news-card:hover {
+  background: var(--bg-elevated);
+  transform: translateX(3px);
+}
+.card-football { border-left-color: var(--color-football); }
+.card-basketball { border-left-color: var(--color-basketball); }
+.card-tennis { border-left-color: var(--color-tennis); }
+.card-cs2 { border-left-color: var(--color-cs2); }
+.card-github { border-left-color: var(--color-github); }
+.card-hn { border-left-color: var(--color-hn); }
+.card-v2ex { border-left-color: var(--color-v2ex); }
+.card-jin10 { border-left-color: var(--color-jin10); }
+.news-card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.rank-badge {
+  min-width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+}
+.rank-1 { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+.rank-2 { background: linear-gradient(135deg, #94a3b8, #64748b); color: white; }
+.rank-3 { background: linear-gradient(135deg, #b45309, #92400e); color: white; }
+.rank-n { background: var(--bg-hover); color: var(--text-muted); }
+.news-title { font-size: 15px; font-weight: 600; line-height: 1.4; }
+.news-summary { color: var(--text-secondary); font-size: 13px; line-height: 1.6; margin-top: 6px; }
+.news-comment { color: var(--text-muted); font-size: 12px; margin-top: 6px; font-style: italic; }
+.news-meta { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.news-tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; border: 1px solid; }
+.news-source { font-size: 11px; color: var(--text-muted); }
+.news-source a { color: var(--primary); text-decoration: none; }
+.news-source a:hover { text-decoration: underline; }
+.audio-player {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.play-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.player-info { flex: 1; min-width: 0; }
+.player-title { font-size: 13px; font-weight: 600; }
+.player-meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+.progress-bar {
+  height: 4px;
+  background: var(--bg-hover);
+  border-radius: 2px;
+  margin-top: 6px;
+  cursor: pointer;
+  overflow: hidden;
+}
+.progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 100ms linear; }
+.time-display { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.section.playing { background: rgba(129, 140, 248, 0.04); border-radius: 8px; padding: 8px; margin-left: -8px; margin-right: -8px; }
+.floating-btn {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 99;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+.floating-btn.show { display: flex; }
+footer {
+  text-align: center;
+  padding: 30px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 40px;
+}
+footer a { color: var(--primary); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .section { animation: none; } }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="site-logo">
+    <div class="site-logo-icon">H</div>
+    <span class="site-logo-text">每日新闻</span>
+  </div>
+  <span class="site-date">2026-08-31 · 周一</span>
+</header>
+<main class="container">
+<h1>每日新闻总结 · 2026-08-31</h1>
+<div class="subtitle">由 Hermes AI 自动生成 · 📅 2026-08-31 06:00</div>
+<div class="audio-player" id="audioPlayer">
+  <button class="play-btn" id="playBtn" onclick="toggleAudio()">
+    <svg id="playIcon" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="pauseIcon" width="14" height="14" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+  <div class="player-info">
+    <div class="player-title">🎧 语音版 · 2026-08-31</div>
+    <div class="player-meta" id="playerMeta">点击播放</div>
+    <div class="progress-bar" id="progressBar" onclick="seekAudio(event)">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+  </div>
+  <audio id="newsAudio" src="../audio/2026-08-31.mp3"></audio>
+</div>
+<button class="floating-btn" id="floatingBtn" onclick="toggleAudio()">
+  <svg id="floatPlayIcon" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+  <svg id="floatPauseIcon" width="16" height="16" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+</button>
+<section class="section" id="sec-market-bar">
+  <div class="section-header">
+    <div class="section-icon-wrap" style="background:rgba(245,158,11,0.08);">📊</div>
+    <h2 class="section-title">市场行情</h2>
+    <span class="section-subtitle">北京时间 2026-08-31 06:00</span>
+  </div>
+  <div class="market-bar"><div class="market-item"><span class="market-item-name">标普500</span><span class="market-item-price">7,711.76</span><span class="market-item-change neg">-0.25%</span></div><div class="market-item"><span class="market-item-name">道琼斯</span><span class="market-item-price">53,559.99</span><span class="market-item-change neg">-0.02%</span></div><div class="market-item"><span class="market-item-name">纳斯达克</span><span class="market-item-price">26,402.42</span><span class="market-item-change neg">-0.52%</span></div><div class="market-item"><span class="market-item-name">黄金</span><span class="market-item-price">4,529.90</span><span class="market-item-change neg">-1.73%</span></div><div class="market-item"><span class="market-item-name">WTI原油</span><span class="market-item-price">83.40</span><span class="market-item-change neg">-0.16%</span></div><div class="market-item"><span class="market-item-name">KWEB</span><span class="market-item-price">26.32</span><span class="market-item-change pos">+0.84%</span></div></div>
+  <div class="market-note">*数据截至北京时间 08-29 04:37 · 美股 08-28（周五）收盘 · 周一无更新</div>
+</section>
+<section class="section" id="sec-football"><div class="section-header"><div class="section-icon-wrap" style="background:rgba(56,189,248,0.08);">⚽</div><h2 class="section-title">足球</h2><span class="section-subtitle">直播吧 · 今日</span></div><div class="news-list"><article class="news-card card-football" role="listitem"><div class="news-card-header"><span class="rank-badge rank-1">🥇</span><h3 class="news-title">穆帅三连胜！皇马4-0马拉加 贝林一条龙破门+造乌龙姆巴佩建功</h3></div><p class="news-summary">西甲第3轮，皇马主场4-0大胜马拉加，穆里尼奥取得执教回归皇马后的开局三连胜。贝林厄姆一条龙破门并制造乌龙，姆巴佩连续两场取得进球，皇马三轮狂轰10球领跑西甲积分榜。</p><p class="news-comment">💬 穆帅这波是真的把皇马玩明白了，贝林一条龙比姆总还姆总，3轮10球这火力，C罗离队后谁敢想？</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#38bdf8">足球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/zuqiu/2026-08-31/match2075430date2026vnative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-football" role="listitem"><div class="news-card-header"><span class="rank-badge rank-2">🥈</span><h3 class="news-title">罗马诺：马丁内利将6600万欧转会新月，税后年薪超过2000万欧</h3></div><p class="news-summary">著名转会记者罗马诺确认，阿森纳边锋马丁内利将以6600万欧元转会沙特豪门利雅得新月，签约至2030年，税后年薪超2000万欧。这笔交易刷新阿森纳队史出售球员转会费纪录。</p><p class="news-comment">💬 马丁内利这波属于是从伦敦北部的&#x27;小透明&#x27;直接晋升沙特&#x27;石油王&#x27;，枪手球迷怕是要哭晕在厕所。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#38bdf8">足球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/zuqiu/2026-08-31/6a94a621e6b21native.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-football" role="listitem"><div class="news-card-header"><span class="rank-badge rank-3">🥉</span><h3 class="news-title">开局两连胜！国米1-0卡利亚里 恰20连场建功巴雷拉助攻 琼斯首秀</h3></div><p class="news-summary">意甲第2轮，国际米兰客场1-0小胜卡利亚里，迎来开局两连胜。恰尔汗奥卢远射世界波连续两轮破门当选全场最佳，从利物浦租借加盟的柯蒂斯-琼斯替补登场完成首秀。</p><p class="news-comment">💬 恰20这脚贴地斩是真有几分齐达内当年欧冠决赛的影子，琼斯首秀也让人期待他和劳塔罗的化学反应。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#38bdf8">足球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/zuqiu/2026-08-31/match2057401date2026vnative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-football" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">4</span><h3 class="news-title">德天空：阿斯顿维拉3000万镑签贝利斯达协议，体检已经安排</h3></div><p class="news-summary">德国天空体育记者消息，阿斯顿维拉已就引进南安普顿年轻后卫贝利斯与对方达成3000万英镑转会协议，体检已经安排妥当。这笔交易在夏窗关闭前即将官宣。</p><p class="news-comment">💬 南安普顿又卖走一位潜力新星，维拉这是要把&#x27;户口本新星&#x27;收集做成产业链了？</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#38bdf8">足球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/zuqiu/2026-08-31/6a945d55af551native.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-football" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">5</span><h3 class="news-title">记者：未来几小时内阿森纳将直接接触小蜘蛛团队，试图说服他加盟</h3></div><p class="news-summary">据记者透露，阿森纳将在未来几小时内直接接触阿尔瓦雷斯（小蜘蛛）的团队，试图说服这位马竞前锋加盟枪手。尽管球员本人更倾向巴萨，但枪手决心在夏窗关闭前完成这笔重磅引援。</p><p class="news-comment">💬 小蜘蛛这出肥皂剧终于要演大结局了？巴萨没钱、阿森纳缺人，马竞老板怕是已经气到摔桌子。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#38bdf8">足球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/zuqiu/2026-08-31/6a94a27eb98canative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article></div></section>
+<section class="section" id="sec-basketball"><div class="section-header"><div class="section-icon-wrap" style="background:rgba(167,139,250,0.08);">🏀</div><h2 class="section-title">篮球</h2><span class="section-subtitle">直播吧 · NBA</span></div><div class="news-list"><article class="news-card card-basketball" role="listitem"><div class="news-card-header"><span class="rank-badge rank-1">🥇</span><h3 class="news-title">新赛季得分王选谁？文胖：没詹姆斯分球权 东契奇得分会重新爆炸</h3></div><p class="news-summary">NBA名嘴文胖在新赛季得分王预测中表示，詹姆斯离开湖人后东契奇将不再需要分球权，得分数据有望大幅反弹并重新爆发。</p><p class="news-comment">💬 詹经理这一走，东契奇球权直接拉满，湖人要起飞还是被刷分？</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#a78bfa">NBA</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/nba/2026-08-30/6a944dc36fdaenative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-basketball" role="listitem"><div class="news-card-header"><span class="rank-badge rank-2">🥈</span><h3 class="news-title">基德：哪个球员变动对联盟影响最大？詹姆斯去76人 其次是字母哥</h3></div><p class="news-summary">前NBA主帅基德在节目中评选今夏影响联盟格局最大的球员变动，詹姆斯加盟76人位列第一，字母哥的去向紧随其后。</p><p class="news-comment">💬 基德这榜单等于宣告：76人下赛季就是东部头号种子预定？</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#a78bfa">NBA</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/nba/2026-08-30/6a9394e5d5250native.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-basketball" role="listitem"><div class="news-card-header"><span class="rank-badge rank-3">🥉</span><h3 class="news-title">Siegel：若勇士交易截止日前西部垫底 巴特勒都有可能被送走</h3></div><p class="news-summary">NBA薪资专家Siegel表示，若勇士在交易截止日前战绩位列西部垫底，连巴特勒这样的核心球员都有可能被摆上交易货架。</p><p class="news-comment">💬 勇士这是在为库里的最后一舞做减法，还是彻底推倒重建？</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#a78bfa">NBA</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/nba/2026-08-31/6a94572d9dd47native.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-basketball" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">4</span><h3 class="news-title">文班亚马28分钟高效砍下18+8+3帽率法国力克瑞典 拉松空砍23分</h3></div><p class="news-summary">世预赛法国对阵瑞典，文班亚马仅出战28分钟便高效贡献18分8篮板3盖帽，率队取胜；瑞典核心拉松空砍23分无力回天。</p><p class="news-comment">💬 28分钟就交18+8+3帽，这效率放在NBA也照样是顶流内线。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#a78bfa">NBA</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/nba/2026-08-31/6a94678dea36cnative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-basketball" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">5</span><h3 class="news-title">狼记：库明加具备极高的潜力 他的到来让森林狼如虎添翼</h3></div><p class="news-summary">森林狼队记者撰文分析库明加加盟后的影响，认为这位年轻锋线潜力极高，将与爱德华兹、拉梅洛·鲍尔组成极具攻击性的核心阵容。</p><p class="news-comment">💬 拒绝湖人、加盟森林狼，库明加和华子+三球的组合下赛季真要冲冠？</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#a78bfa">NBA</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/nba/2026-08-31/6a949dcf61aafnative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article></div></section>
+<section class="section" id="sec-tennis"><div class="section-header"><div class="section-icon-wrap" style="background:rgba(251,146,60,0.08);">🎾</div><h2 class="section-title">网球</h2><span class="section-subtitle">直播吧 · 美网</span></div><div class="news-list"><article class="news-card card-tennis" role="listitem"><div class="news-card-header"><span class="rank-badge rank-1">🥇</span><h3 class="news-title">迎美网开门红！美网男单首轮：吴易昺3-0战胜沃尔顿</h3></div><p class="news-summary">美网男单首轮，中国选手吴易昺以7-6/6-2/7-5直落三盘战胜美国选手沃尔顿，时隔三年再度闯入美网第二轮，斩获开门红。</p><p class="news-comment">💬 三年磨一剑！吴易昺这场打得够稳，关键分顶住了，三盘横扫对手没给任何机会，吴粉过年了。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#fb923c">网球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/other/2026-08-31/6a946bee89b1anative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-tennis" role="listitem"><div class="news-card-header"><span class="rank-badge rank-2">🥈</span><h3 class="news-title">终结伦敦站夺冠后单打五连败！美网女单首轮：维基奇2-1胜吉布森</h3></div><p class="news-summary">美网女单首轮，维基奇虽然在第二盘错失4-1领先被拖进决胜盘，但最终还是以2-1(6-2/4-6/6-3)淘汰吉布森，终结了伦敦站夺冠之后的单打五连败。</p><p class="news-comment">💬 维基奇终于止住颓势，这五连败估计她自己看着也着急，第二盘差点翻车，好在决胜盘稳住了。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#fb923c">网球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/other/2026-08-31/6a9472057bddenative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-tennis" role="listitem"><div class="news-card-header"><span class="rank-badge rank-3">🥉</span><h3 class="news-title">美网男单夺冠赔率：阿卡领跑，兹维列夫第二，39岁德约第三</h3></div><p class="news-summary">美网开战在即，相关机构更新男单夺冠赔率榜单：伤愈复出的阿尔卡拉斯排名第一，头号种子兹维列夫第二，39岁德约科维奇第三，弗里茨、谢尔顿分列四五位。</p><p class="news-comment">💬 39岁的德约依然能进赔率前三，goat就是goat，反观某几位被伤病毁掉的天才，阿卡这次美网若夺冠基本预定年终第一。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#fb923c">网球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/other/2026-08-30/6a93defc3d6danative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-tennis" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">4</span><h3 class="news-title">WTA本赛季有8位球员斩获生涯首冠，郑钦文美网首轮对手柳托娃在列</h3></div><p class="news-summary">郑钦文将在美网首轮迎战16岁小将柳托娃，比赛将于北京时间9月1日23时进行。柳托娃今年WTA250孟菲斯站夺冠，成为首位夺得WTA冠军的10后球员。</p><p class="news-comment">💬 10后都拿WTA冠军了，郑钦文这签运也是没谁了——首轮就抽到迷你版的自己，年轻真好啊。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#fb923c">网球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/other/2026-08-30/6a93cba997237native.htm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-tennis" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">5</span><h3 class="news-title">创造历史！泰国女排亚锦赛连克中国、日本，历史首次晋级奥运会</h3></div><p class="news-summary">（排球补充）泰国女排在亚锦赛决赛中以3-2力克卫冕冠军中国女排，连克中日两大亚洲劲旅，历史首次通过亚锦赛拿到奥运会入场券。中国女排获亚军，无缘直通奥运。</p><p class="news-comment">💬 女排热搜都被泰国队刷屏了，冯坤老公带队掀翻中国队，这剧本写得比电视剧还离谱，下一步奥运资格得去打落选赛了。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#fb923c">网球</span><span class="news-source">📡 直播吧 · <a href="https://news.zhibo8.com/other/2026-08-30/6a9435bec9cfenative.htm" target="_blank" rel="noopener">查看原文</a></span></div></article></div></section>
+<section class="section" id="sec-cs2"><div class="section-header"><div class="section-icon-wrap" style="background:rgba(244,114,182,0.08);">🎮</div><h2 class="section-title">CS2</h2><span class="section-subtitle">5eplay · 今日</span></div><div class="news-list"><article class="news-card card-cs2" role="listitem"><div class="news-card-header"><span class="rank-badge rank-1">🥇</span><h3 class="news-title">BLAST波尔图公开赛第五日赛果：NAVI淘汰出局，Vitality险胜</h3></div><p class="news-summary">BLAST波尔图公开赛第五日爆出大冷门，NAVI在淘汰赛阶段遗憾出局；卫冕冠军Vitality则在与Legacy的强强对话中以2-1险胜晋级，chopper赛后表示不敢相信NAVI会出局。</p><p class="news-comment">💬 NAVI这是要重建的节奏啊，分析师都在喊换人，乌克兰军团到底怎么了？</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f472b6">CS2</span><span class="news-source">📡 5eplay · <a href="https://csgo.5eplay.com/article/260831uh5gwm" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-cs2" role="listitem"><div class="news-card-header"><span class="rank-badge rank-2">🥈</span><h3 class="news-title">BLAST波尔图公开赛：豆战胜佛！Vitality 2-1 Legacy</h3></div><p class="news-summary">BLAST波尔图公开赛焦点战，Vitality与Legacy上演强强对话，最终Vitality 2-1险胜晋级，全队多点开花拿下这场关键胜利。</p><p class="news-comment">💬 豆战胜佛这名字起得真好，Vitality这一波连胜是要提前预定赛季大满贯？</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f472b6">CS2</span><span class="news-source">📡 5eplay · <a href="https://csgo.5eplay.com/article/260831zqu1p6" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-cs2" role="listitem"><div class="news-card-header"><span class="rank-badge rank-3">🥉</span><h3 class="news-title">chopper：不敢相信NAVI会淘汰出局，应该换掉Aleksib和iM</h3></div><p class="news-summary">NAVI战队指挥chopper在BLAST波尔图出局后接受采访，直言不敢相信队伍会被淘汰，并建议管理层考虑换掉Aleksib和iM两名选手。</p><p class="news-comment">💬 chopper这番表态基本等于公开处刑了，iM最近确实状态拉胯，NAVI这是要变天。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f472b6">CS2</span><span class="news-source">📡 5eplay · <a href="https://csgo.5eplay.com/article/260831rn498y" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-cs2" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">4</span><h3 class="news-title">ropz：目前队伍在努力打磨基础，队伍近期思路太过死板</h3></div><p class="news-summary">Vitality主力ropz接受采访表示，队伍近期战绩不佳源于战术思路过于死板，目前全队正在努力打磨基础，希望尽快回到正轨。</p><p class="news-comment">💬 ropz这话说得真诚，Vitality这套阵容上限高但发挥不稳，需要点化学反应。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f472b6">CS2</span><span class="news-source">📡 5eplay · <a href="https://csgo.5eplay.com/article/260831b8wvk0" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-cs2" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">5</span><h3 class="news-title">分析师热议NAVI：应该换掉iM、Aleksib或w0nderful</h3></div><p class="news-summary">NAVI在BLAST波尔图出局后，多位分析师热议阵容调整，认为应该从iM、Aleksib或w0nderful三人中选一个进行调整，队伍需要立即做出改变。</p><p class="news-comment">💬 分析师都看出来NAVI的问题了，俱乐部还在装睡呢？早点重建吧别浪费时间。</p><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f472b6">CS2</span><span class="news-source">📡 5eplay · <a href="https://csgo.5eplay.com/article/260830j6ba5y" target="_blank" rel="noopener">查看原文</a></span></div></article></div></section>
+<section class="section" id="sec-github"><div class="section-header"><div class="section-icon-wrap" style="background:rgba(129,140,248,0.08);">📦</div><h2 class="section-title">GitHub Trending</h2><span class="section-subtitle">今日 · Top 8</span></div><div class="news-list"><article class="news-card card-github" role="listitem"><div class="news-card-header"><span class="rank-badge rank-1">🥇</span><h3 class="news-title">THU-MAIC/OpenMAIC</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#818cf8">GitHub</span><span class="news-source">📡 GitHub · <a href="https://github.com/THU-MAIC/OpenMAIC" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-github" role="listitem"><div class="news-card-header"><span class="rank-badge rank-2">🥈</span><h3 class="news-title">K-Dense-AI/scientific-agent-skills</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#818cf8">GitHub</span><span class="news-source">📡 GitHub · <a href="https://github.com/K-Dense-AI/scientific-agent-skills" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-github" role="listitem"><div class="news-card-header"><span class="rank-badge rank-3">🥉</span><h3 class="news-title">Lakr233/vphone-cli</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#818cf8">GitHub</span><span class="news-source">📡 GitHub · <a href="https://github.com/Lakr233/vphone-cli" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-github" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">4</span><h3 class="news-title">tt-a1i/archify</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#818cf8">GitHub</span><span class="news-source">📡 GitHub · <a href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-github" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">5</span><h3 class="news-title">p-e-w/heretic</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#818cf8">GitHub</span><span class="news-source">📡 GitHub · <a href="https://github.com/p-e-w/heretic" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-github" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">6</span><h3 class="news-title">unclecode/crawl4ai</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#818cf8">GitHub</span><span class="news-source">📡 GitHub · <a href="https://github.com/unclecode/crawl4ai" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-github" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">7</span><h3 class="news-title">mvanhorn/last30days-skill</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#818cf8">GitHub</span><span class="news-source">📡 GitHub · <a href="https://github.com/mvanhorn/last30days-skill" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-github" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">8</span><h3 class="news-title">majd/ipatool</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#818cf8">GitHub</span><span class="news-source">📡 GitHub · <a href="https://github.com/majd/ipatool" target="_blank" rel="noopener">查看原文</a></span></div></article></div></section>
+<section class="section" id="sec-hn"><div class="section-header"><div class="section-icon-wrap" style="background:rgba(45,212,191,0.08);">💬</div><h2 class="section-title">HackerNews</h2><span class="section-subtitle">今日 · Top 6</span></div><div class="news-list"><article class="news-card card-hn" role="listitem"><div class="news-card-header"><span class="rank-badge rank-1">🥇</span><h3 class="news-title">Creepy Crawlies</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#2dd4bf">HN</span><span class="news-source">📡 HackerNews · <a href="https://people.kernel.org/monsieuricon/creepy-crawlies" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-hn" role="listitem"><div class="news-card-header"><span class="rank-badge rank-2">🥈</span><h3 class="news-title">Omarchy: Any User Process Can Escalate to Root</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#2dd4bf">HN</span><span class="news-source">📡 HackerNews · <a href="https://0xcc.io/posts/omarchy-root-creds/" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-hn" role="listitem"><div class="news-card-header"><span class="rank-badge rank-3">🥉</span><h3 class="news-title">Europe&#x27;s summer drought is so extreme that desertification is a growing threat</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#2dd4bf">HN</span><span class="news-source">📡 HackerNews · <a href="https://fortune.com/2026/08/29/europe-summer-drought-desertification-threat-rivers-fish/" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-hn" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">4</span><h3 class="news-title">Hy4 preview</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#2dd4bf">HN</span><span class="news-source">📡 HackerNews · <a href="https://www.tencent.com/tencent-releases-and-open-sources-tencent-hy4-preview/" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-hn" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">5</span><h3 class="news-title">Hacking IKEA Furniture</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#2dd4bf">HN</span><span class="news-source">📡 HackerNews · <a href="https://greenlightning.eu/diy/hacking-ikea-furniture/" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-hn" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">6</span><h3 class="news-title">Casey Muratori – The Root of the Root of All Evil – BSC 2026 [video]</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#2dd4bf">HN</span><span class="news-source">📡 HackerNews · <a href="https://www.youtube.com/watch?v=hpj6r6CjJf8" target="_blank" rel="noopener">查看原文</a></span></div></article></div></section>
+<section class="section" id="sec-v2ex"><div class="section-header"><div class="section-icon-wrap" style="background:rgba(245,158,11,0.08);">🔗</div><h2 class="section-title">V2EX</h2><span class="section-subtitle">今日热议</span></div><div class="news-list"><article class="news-card card-v2ex" role="listitem"><div class="news-card-header"><span class="rank-badge rank-1">🥇</span><h3 class="news-title">手上有很多 Token 用不完，自己搭了个中转站</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">V2EX</span><span class="news-source">📡 V2EX · <a href="https://www.v2ex.com/t/1238174" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-v2ex" role="listitem"><div class="news-card-header"><span class="rank-badge rank-2">🥈</span><h3 class="news-title">丈母娘医院手术出院半月后从体内取出一块纱布该如何维权</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">V2EX</span><span class="news-source">📡 V2EX · <a href="https://www.v2ex.com/t/1238162" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-v2ex" role="listitem"><div class="news-card-header"><span class="rank-badge rank-3">🥉</span><h3 class="news-title">记一次 GLM 开发严重事故，花了 8 亿 token，买了个教训</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">V2EX</span><span class="news-source">📡 V2EX · <a href="https://www.v2ex.com/t/1238217" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-v2ex" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">4</span><h3 class="news-title">iPhone 上用 Gmail 还是邮件 App</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">V2EX</span><span class="news-source">📡 V2EX · <a href="https://www.v2ex.com/t/1238151" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-v2ex" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">5</span><h3 class="news-title">我的网站被入侵了，损失了几千块</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">V2EX</span><span class="news-source">📡 V2EX · <a href="https://www.v2ex.com/t/1238129" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-v2ex" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">6</span><h3 class="news-title">求 100 USD AI 订阅推荐， grok 还是 gemini？</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">V2EX</span><span class="news-source">📡 V2EX · <a href="https://www.v2ex.com/t/1238150" target="_blank" rel="noopener">查看原文</a></span></div></article></div></section>
+<section class="section" id="sec-jin10"><div class="section-header"><div class="section-icon-wrap" style="background:rgba(245,158,11,0.08);">📊</div><h2 class="section-title">财经快讯</h2><span class="section-subtitle">金十数据 · 重要事件</span></div><div class="news-list"><article class="news-card card-jin10" role="listitem"><div class="news-card-header"><span class="rank-badge rank-1">🥇</span><h3 class="news-title">伊朗革命卫队：伊朗向美军基地发射导弹</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">地缘冲突</span><span class="news-source">📡 金十数据 · <a href="#" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-jin10" role="listitem"><div class="news-card-header"><span class="rank-badge rank-2">🥈</span><h3 class="news-title">美军袭击伊朗南部岛屿 伊朗誓言报复</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">地缘冲突</span><span class="news-source">📡 金十数据 · <a href="#" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-jin10" role="listitem"><div class="news-card-header"><span class="rank-badge rank-3">🥉</span><h3 class="news-title">特朗普呼吁与美国有业务往来的加拿大公司迁往美国</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">贸易</span><span class="news-source">📡 金十数据 · <a href="#" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-jin10" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">4</span><h3 class="news-title">英海事安全信息机构：一油轮在霍尔木兹海峡遇袭</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">能源</span><span class="news-source">📡 金十数据 · <a href="#" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-jin10" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">5</span><h3 class="news-title">特朗普称将用委内瑞拉石油填满美国战略储备</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">能源</span><span class="news-source">📡 金十数据 · <a href="#" target="_blank" rel="noopener">查看原文</a></span></div></article><article class="news-card card-jin10" role="listitem"><div class="news-card-header"><span class="rank-badge rank-n">6</span><h3 class="news-title">下周重要事件与数据预告——美国8月非农、中国8月PMI、G20财长与央行行长会议</h3></div><div class="news-meta"><span class="news-tag" style="background:rgba(56,189,248,0.12);color:#f59e0b">展望</span><span class="news-source">📡 金十数据 · <a href="#" target="_blank" rel="noopener">查看原文</a></span></div></article></div></section>
+<footer>
+由 <a href="https://github.com/zhangJingTao/daily-news-by-hermes">Hermes AI</a> 每日自动生成 · 
+<a href="https://zhangjingtao.github.io/daily-news-by-hermes/">📋 新闻总览</a>
+</footer>
+</main>
+<script>
+var playing = false;
+var audio = document.getElementById("newsAudio");
+var progressFill = document.getElementById("progressFill");
+var timeDisplay = document.getElementById("timeDisplay");
+var playerMeta = document.getElementById("playerMeta");
+var floatingBtn = document.getElementById("floatingBtn");
+var playIcon = document.getElementById("playIcon");
+var pauseIcon = document.getElementById("pauseIcon");
+var floatPlayIcon = document.getElementById("floatPlayIcon");
+var floatPauseIcon = document.getElementById("floatPauseIcon");
+var currentSection = -1;
+var sections = [
+  { id: "sec-market-bar", label: "📊 行情" },
+  { id: "sec-football", label: "⚽ 足球" },
+  { id: "sec-basketball", label: "🏀 NBA" },
+  { id: "sec-tennis", label: "🎾 网球" },
+  { id: "sec-cs2", label: "🎮 CS2" },
+  { id: "sec-github", label: "📦 GitHub" },
+  { id: "sec-hn", label: "💬 HN" },
+  { id: "sec-v2ex", label: "🔗 V2EX" }
+];
+function fmt(s) { var m = Math.floor(s/60); var sec = Math.floor(s%60); return m + ":" + (sec<10?"0":"") + sec; }
+function toggleAudio() {
+  if (playing) { audio.pause(); audio.currentTime = 0; playing = false; syncUI(false); playerMeta.textContent = "点击播放"; }
+  else { audio.play(); playing = true; syncUI(true); }
+}
+function syncUI(p) {
+  playIcon.style.display = p ? "none" : "block";
+  pauseIcon.style.display = p ? "block" : "none";
+  floatPlayIcon.style.display = p ? "none" : "block";
+  floatPauseIcon.style.display = p ? "block" : "none";
+}
+audio.addEventListener("loadedmetadata", function() {
+  var dur = Math.round(audio.duration);
+  var n = sections.length;
+  for (var i = 0; i < n; i++) {
+    sections[i].start = Math.round(dur * i / n);
+    sections[i].end = Math.round(dur * (i + 1) / n);
+  }
+  sections[n-1].end = dur;
+});
+audio.addEventListener("timeupdate", function() {
+  if (!audio.duration) return;
+  var t = audio.currentTime;
+  var pct = (t / audio.duration) * 100;
+  progressFill.style.width = pct + "%";
+  timeDisplay.textContent = fmt(t) + " / " + fmt(audio.duration);
+  var idx = -1;
+  for (var i = 0; i < sections.length; i++) {
+    if (t >= sections[i].start && t < sections[i].end) { idx = i; break; }
+  }
+  if (idx !== currentSection) {
+    document.querySelectorAll(".section.playing").forEach(function(el) { el.classList.remove("playing"); });
+    if (idx >= 0) {
+      var el = document.getElementById(sections[idx].id);
+      if (el) el.classList.add("playing");
+      playerMeta.textContent = "正在播报：" + sections[idx].label;
+    }
+    currentSection = idx;
+  }
+});
+audio.addEventListener("ended", function() {
+  playing = false; syncUI(false); playerMeta.textContent = "播报结束";
+  document.querySelectorAll(".section.playing").forEach(function(el) { el.classList.remove("playing"); });
+});
+function seekAudio(e) {
+  var bar = document.getElementById("progressBar");
+  var rect = bar.getBoundingClientRect();
+  var pct = (e.clientX - rect.left) / rect.width;
+  if (audio.duration) audio.currentTime = pct * audio.duration;
+}
+new IntersectionObserver(function(entries) {
+  floatingBtn.classList.toggle("show", !entries[0].isIntersecting && playing);
+}, { threshold: 0.1 }).observe(document.getElementById("audioPlayer"));
+</script>
+</body>
+</html>
